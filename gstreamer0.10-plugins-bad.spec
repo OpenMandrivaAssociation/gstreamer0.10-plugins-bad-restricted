@@ -1,6 +1,6 @@
-%define version 0.10.4
+%define version 0.10.5
 
-%define release %mkrel 2
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -8,17 +8,24 @@
 %define name %bname-plugins-bad
 %define build_plf 0
 %{?_with_plf: %{expand: %%global build_plf 1}}
+%define build_amrwb 0
 %define build_faac 0
 %define build_faad 0
 %define build_xvid 0
+%define build_x264 0
 %define build_dts 0
 %if %build_plf
 %define distsuffix plf
+%define build_amrwb 1
 %define build_faac 1
 %define build_faad 1
+%define build_x264 1
 %define build_xvid 1
 %define build_dts 1
 %endif
+
+%define libname %mklibname gstapp0.10_ 0
+%define libnamedev %mklibname -d gstapp0.10_ 0
 
 Summary: 	GStreamer Streaming-media framework plug-ins
 Name: 		%name
@@ -27,7 +34,6 @@ Release: 	%release
 License: 	LGPL
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
-Patch: gst-plugins-bad-0.10.3-faad.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -46,6 +52,7 @@ BuildRequires: valgrind libcheck-devel
 BuildRequires: libgstreamer-plugins-base-devel >= %version
 BuildRequires: libmesaglu-devel
 BuildRequires: libcdaudio-devel
+BuildRequires: libsndfile-devel
 Provides:	%bname-audiosrc
 Provides:	%bname-audiosink
 
@@ -145,6 +152,21 @@ This package is in PLF as it violates some patents.
 %_libdir/gstreamer-%{majorminor}/libgstxvid.so
 %endif
 
+%if %build_x264
+%package -n %bname-x264
+Summary:GStreamer plug-in for H264/AVC video encoding
+Group:         Video
+BuildRequires: libx264-devel
+ 
+%description -n %bname-x264
+Plug-in for encoding H264/AVC video.
+ 
+This package is in PLF as it violates some patents.
+%files -n %bname-x264
+%defattr(-, root, root)
+%_libdir/gstreamer-%{majorminor}/libgstx264.so
+%endif
+
 %package -n %bname-musepack
 Summary:GStreamer plug-in Musepack playback
 Group:         Sound
@@ -185,24 +207,23 @@ Plug-in supporting the video output to DirectFB.
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstdfbvideosink.so
 
+%package -n %libname
+Group: System/Libraries
+Summary: GStreamer application library
+%description -n %libname
+This is the GStreamer application library.
 
-%package -n %bname-wavpack
-Summary: Gstreamer plugin for encoding and decoding WavPack audio files
-Group: Sound
-Requires: %bname-plugins = %{version}
-BuildRequires: libwavpack-devel
+%package -n %libnamedev
+Group: Development/C
+Summary: GStreamer application library
+Requires: %libname = %version
+%description -n %libnamedev
+This is the GStreamer application library.
 
-%description -n %bname-wavpack
-Plug-Ins for creating and playing WavPack audio files.
 
-%files -n %bname-wavpack
-%defattr(-, root, root)
-%{_libdir}/gstreamer-%{majorminor}/libgstwavpack.so
 
 %prep
 %setup -q -n gst-plugins-bad-%{version}
-%patch -p1 -b .faad
-autoconf
 
 %build
 %configure2_5x --disable-dependency-tracking \
@@ -218,7 +239,7 @@ autoconf
 %check
 cd tests/check
 # gw elements/y4menc and wavpack fail
-#make check
+make check
 
 %install
 rm -rf %buildroot gst-plugins-base-%majorminor.lang
@@ -234,10 +255,24 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post -n %libname -p /sbin/ldconfig
+%postun -n %libname -p /sbin/ldconfig
 
 %files -f gst-plugins-bad-%majorminor.lang
 %defattr(-, root, root)
 %doc AUTHORS COPYING README NEWS docs/plugins/html
+%_libdir/gstreamer-%majorminor/libgstapp.so
+%_libdir/gstreamer-%majorminor/libgstbayer.so
+%_libdir/gstreamer-%majorminor/libgstequalizer.so
+%_libdir/gstreamer-%majorminor/libgstinterleave.so
+%_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
+%_libdir/gstreamer-%majorminor/libgstmve.so
+%_libdir/gstreamer-%majorminor/libgstreal.so
+%_libdir/gstreamer-%majorminor/libgstrtpmanager.so
+%_libdir/gstreamer-%majorminor/libgstsndfile.so
+%_libdir/gstreamer-%majorminor/libgstswitch.so
+%_libdir/gstreamer-%majorminor/libgstvideosignal.so
+%_libdir/gstreamer-%majorminor/libgstvmnc.so
 %_libdir/gstreamer-%majorminor/libgstalsaspdif.so
 %_libdir/gstreamer-%majorminor/libgstbz2.so
 %_libdir/gstreamer-%majorminor/libgstcdaudio.so
@@ -252,15 +287,13 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstmultifile.so
 %_libdir/gstreamer-%majorminor/libgstnsf.so
 %_libdir/gstreamer-%majorminor/libgstnuvdemux.so
-%_libdir/gstreamer-%majorminor/libgstqtdemux.so
 %_libdir/gstreamer-%majorminor/libgstreplaygain.so
 %_libdir/gstreamer-%majorminor/libgstrfbsrc.so
-%_libdir/gstreamer-%majorminor/libgstsdlvideosink.so
+%_libdir/gstreamer-%majorminor/libgstsdl.so
 %_libdir/gstreamer-%majorminor/libgstspectrum.so
 %_libdir/gstreamer-%majorminor/libgstspeed.so
 %_libdir/gstreamer-%majorminor/libgsttrm.so
 %_libdir/gstreamer-%majorminor/libgsttta.so
-%_libdir/gstreamer-%majorminor/libgstvideocrop.so
 %_libdir/gstreamer-%majorminor/libgstvideoparse.so
 %_libdir/gstreamer-%majorminor/libgstxingheader.so
 %_libdir/gstreamer-%majorminor/libgsty4menc.so
@@ -339,4 +372,41 @@ Plug-in for HTTP access based on libneon.
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstneonhttpsrc.so
 
+%package -n %bname-nas
+Summary:  Gstreamer output plugin for the NAS sound server
+Group:    Sound
+Requires: %bname-plugins = %{version}
+BuildRequires: libnas-devel
 
+%description -n %bname-nas
+Output plugin for GStreamer for use with the nas sound server.
+
+%files -n %bname-nas
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstnassink.so
+
+
+%files -n %libname
+%defattr(-, root, root)
+%_libdir/libgstapp-0.10.so.0*
+
+%files -n %libnamedev
+%defattr(-, root, root)
+%_libdir/libgstapp-0.10.so
+%_includedir/gstreamer-0.10/gst/app/
+
+%if %build_amrwb
+%package -n %bname-amrwb
+Summary: GStreamer plug-in for AMR-WB support
+Group:  Sound
+Requires: %bname-plugins >= %{version}
+BuildRequires: libamrwb-devel
+
+%description -n %bname-amrwb
+Plug-in for decoding AMR-WB under GStreamer.
+
+This package is in PLF as it violates some patents.
+%files -n %bname-amrwb
+%defattr(-, root, root)
+%{_libdir}/gstreamer-%{majorminor}/libgstamrwb.so
+%endif
