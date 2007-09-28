@@ -1,6 +1,6 @@
 %define version 0.10.5
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -34,6 +34,10 @@ Release: 	%release
 License: 	LGPL
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
+#gw fix playback of M4A in rhythmbox with crossfading enabled:
+# http://bugzilla.gnome.org/show_bug.cgi?id=424836
+# and http://bugzilla.gnome.org/show_bug.cgi?id=476370
+Patch: gst-plugins-bad-0.10.5-faad-fix-skipping-playback.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -224,6 +228,7 @@ This is the GStreamer application library.
 
 %prep
 %setup -q -n gst-plugins-bad-%{version}
+%patch -p1 -b .faad-fix-skipping-playback
 
 %build
 %configure2_5x --disable-dependency-tracking \
