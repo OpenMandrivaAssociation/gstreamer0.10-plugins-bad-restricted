@@ -39,7 +39,6 @@ Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{
 # and http://bugzilla.gnome.org/show_bug.cgi?id=476370
 Patch: gst-plugins-bad-0.10.5-faad-fix-skipping-playback.patch
 URL:            http://gstreamer.freedesktop.org/
-BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
 BuildRequires:  gtk+2-devel
 BuildRequires:  glib2-devel >= %_glib2 
