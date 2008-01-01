@@ -1,6 +1,6 @@
 %define version 0.10.5
 
-%define release %mkrel 2
+%define release %mkrel 3
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -38,6 +38,9 @@ Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{
 # http://bugzilla.gnome.org/show_bug.cgi?id=424836
 # and http://bugzilla.gnome.org/show_bug.cgi?id=476370
 Patch: gst-plugins-bad-0.10.5-faad-fix-skipping-playback.patch
+# gw: fix for bug #36437 (paths to realplayer codecs)
+# prefer codecs from the RealPlayer package in restricted
+Patch1: gst-plugins-bad-0.10.5-real-codecs-path.patch
 URL:            http://gstreamer.freedesktop.org/
 #gw for the pixbuf plugin
 BuildRequires:  gtk+2-devel
@@ -228,8 +231,13 @@ This is the GStreamer application library.
 %prep
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1 -b .faad-fix-skipping-playback
+%patch1 -p1
 
 %build
+#gw switch path definition for PLF's codec package
+%if %build_plf
+export CPPFLAGS=-DPLF_BUILD
+%endif
 %configure2_5x --disable-dependency-tracking \
 %if ! %build_faac
 	--disable-faac \
