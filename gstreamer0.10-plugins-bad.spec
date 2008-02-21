@@ -1,6 +1,6 @@
-%define version 0.10.5
+%define version 0.10.6
 
-%define release %mkrel 6
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -34,13 +34,10 @@ Release: 	%release
 License: 	LGPL
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
-#gw fix playback of M4A in rhythmbox with crossfading enabled:
-# http://bugzilla.gnome.org/show_bug.cgi?id=424836
-# and http://bugzilla.gnome.org/show_bug.cgi?id=476370
-Patch: gst-plugins-bad-0.10.5-faad-fix-skipping-playback.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
-Patch1: gst-plugins-bad-0.10.5-real-codecs-path.patch
+Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
+Patch2: gst-plugins-bad-0.10.6-disable-generic-states-check.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -52,12 +49,13 @@ BuildRequires: libSDL-devel
 BuildRequires: libbzip2-devel
 BuildRequires: libmodplug-devel
 BuildRequires: libmusicbrainz-devel
+# gw it checks for libdc1394-2 = 2.0.0-rc5
+# BuildRequires: libdc1394-devel
 %ifarch %ix86
 BuildRequires: nasm => 0.90
 %endif
 BuildRequires: valgrind libcheck-devel
 BuildRequires: libgstreamer-plugins-base-devel >= %version
-BuildRequires: libmesaglu-devel
 BuildRequires: libcdaudio-devel
 BuildRequires: libsndfile-devel
 Provides:	%bname-audiosrc
@@ -86,11 +84,10 @@ work on.
 This package is in PLF as it violates some patents.
 %endif
 
-%if 0
 %package -n %bname-mpeg2enc
 Summary:       GStreamer mjpegtools plug-in
 Group:         Video
-BuildRequires: libmjpegtools-devel < 1.9.0
+BuildRequires: libmjpegtools-devel
 
 %description -n %bname-mpeg2enc
 mjpegtools-based encoding and decoding plug-in.
@@ -98,7 +95,6 @@ mjpegtools-based encoding and decoding plug-in.
 %files -n %bname-mpeg2enc
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstmpeg2enc.so
-%endif
 
 ### LADSPA ###
 %package -n %bname-ladspa
@@ -214,6 +210,33 @@ Plug-in supporting the video output to DirectFB.
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstdfbvideosink.so
 
+%package -n %bname-soundtouch
+Summary:       GStreamer plug-in for SoundTouch support
+Group: Sound
+Requires:      %bname-plugins = %{version}
+BuildRequires: libsoundtouch-devel
+
+%description -n %bname-soundtouch
+Plug-in supporting the SoundTouch audio manipulation support.
+
+%files -n %bname-soundtouch
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstsoundtouch.so
+
+%package -n %bname-metadata
+Summary:       GStreamer plug-in for metadata support
+Group: System/Libraries
+Requires:      %bname-plugins = %{version}
+BuildRequires: libexif-devel
+BuildRequires: libiptcdata-devel
+
+%description -n %bname-metadata
+Plug-in supporting several metadata formats.
+
+%files -n %bname-metadata
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstmetadata.so
+
 %package -n %libname
 Group: System/Libraries
 Summary: GStreamer application library
@@ -231,14 +254,13 @@ This is the GStreamer application library.
 
 %prep
 %setup -q -n gst-plugins-bad-%{version}
-%patch -p1 -b .faad-fix-skipping-playback
 %patch1 -p1
+%patch2 -p1
+aclocal -I common/m4 -I m4
+autoconf
+automake
 
 %build
-#gw switch path definition for PLF's codec package
-%if %build_plf
-export CPPFLAGS=-DPLF_BUILD
-%endif
 %configure2_5x --disable-dependency-tracking \
 %if ! %build_faac
 	--disable-faac \
@@ -276,14 +298,25 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING README NEWS docs/plugins/html
 %_libdir/gstreamer-%majorminor/libgstapp.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
-%_libdir/gstreamer-%majorminor/libgstequalizer.so
+%_libdir/gstreamer-%majorminor/libgstdvb.so
+%_libdir/gstreamer-%majorminor/libgstdvdspu.so
+%_libdir/gstreamer-%majorminor/libgstfbdevsink.so
+%_libdir/gstreamer-%majorminor/libgstfestival.so
+%_libdir/gstreamer-%majorminor/libgstflvdemux.so
 %_libdir/gstreamer-%majorminor/libgstinterleave.so
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
+%_libdir/gstreamer-%majorminor/libgstmpeg4videoparse.so
+%_libdir/gstreamer-%majorminor/libgstmpegtsparse.so
 %_libdir/gstreamer-%majorminor/libgstmve.so
+%_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
 %_libdir/gstreamer-%majorminor/libgstrtpmanager.so
+%_libdir/gstreamer-%majorminor/libgstsdpelem.so
+%_libdir/gstreamer-%majorminor/libgstselector.so
 %_libdir/gstreamer-%majorminor/libgstsndfile.so
-%_libdir/gstreamer-%majorminor/libgstswitch.so
+%_libdir/gstreamer-%majorminor/libgstspeexresample.so
+%_libdir/gstreamer-%majorminor/libgststereo.so
+%_libdir/gstreamer-%majorminor/libgstvcdsrc.so
 %_libdir/gstreamer-%majorminor/libgstvideosignal.so
 %_libdir/gstreamer-%majorminor/libgstvmnc.so
 %_libdir/gstreamer-%majorminor/libgstalsaspdif.so
@@ -291,24 +324,18 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstcdaudio.so
 %_libdir/gstreamer-%majorminor/libgstcdxaparse.so
 %_libdir/gstreamer-%majorminor/libgstdeinterlace.so
-%_libdir/gstreamer-%majorminor/libgstdvbsrc.so
 %_libdir/gstreamer-%majorminor/libgstfilter.so
 %_libdir/gstreamer-%majorminor/libgstfreeze.so
-%_libdir/gstreamer-%majorminor/libgstglimagesink.so
 %_libdir/gstreamer-%majorminor/libgsth264parse.so
 %_libdir/gstreamer-%majorminor/libgstmodplug.so
-%_libdir/gstreamer-%majorminor/libgstmultifile.so
 %_libdir/gstreamer-%majorminor/libgstnsf.so
 %_libdir/gstreamer-%majorminor/libgstnuvdemux.so
 %_libdir/gstreamer-%majorminor/libgstreplaygain.so
 %_libdir/gstreamer-%majorminor/libgstrfbsrc.so
 %_libdir/gstreamer-%majorminor/libgstsdl.so
-%_libdir/gstreamer-%majorminor/libgstspectrum.so
 %_libdir/gstreamer-%majorminor/libgstspeed.so
 %_libdir/gstreamer-%majorminor/libgsttrm.so
 %_libdir/gstreamer-%majorminor/libgsttta.so
-%_libdir/gstreamer-%majorminor/libgstvideoparse.so
-%_libdir/gstreamer-%majorminor/libgstxingheader.so
 %_libdir/gstreamer-%majorminor/libgsty4menc.so
 
 %if %build_faad
@@ -385,6 +412,21 @@ Plug-in for HTTP access based on libneon.
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstneonhttpsrc.so
 
+
+%package -n %bname-soup
+Summary:  GStreamer HTTP plugin based on libsoup
+Group:    System/Libraries
+Requires: %bname-plugins = %{version}
+BuildRequires: libsoup-devel >= 2.3
+
+%description -n %bname-soup
+Plug-in for HTTP access based on libsoup.
+
+%files -n %bname-soup
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstsouphttpsrc.so
+
+%if 0
 %package -n %bname-nas
 Summary:  Gstreamer output plugin for the NAS sound server
 Group:    Sound
@@ -397,7 +439,7 @@ Output plugin for GStreamer for use with the nas sound server.
 %files -n %bname-nas
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstnassink.so
-
+%endif
 
 %files -n %libname
 %defattr(-, root, root)
