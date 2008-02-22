@@ -1,6 +1,6 @@
 %define version 0.10.6
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -34,10 +34,12 @@ Release: 	%release
 License: 	LGPL
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
+# gw: fix configure check for nas
+Patch: gst-plugins-bad-0.10.6-nas.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-Patch2: gst-plugins-bad-0.10.6-disable-generic-states-check.patch
+Patch2: gst-plugins-bad-0.10.6-disable-directfb-in-generic-states-check.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -254,6 +256,7 @@ This is the GStreamer application library.
 
 %prep
 %setup -q -n gst-plugins-bad-%{version}
+%patch -p1
 %patch1 -p1
 cd tests/check
 %patch2 -p0
@@ -428,7 +431,6 @@ Plug-in for HTTP access based on libsoup.
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstsouphttpsrc.so
 
-%if 0
 %package -n %bname-nas
 Summary:  Gstreamer output plugin for the NAS sound server
 Group:    Sound
@@ -441,7 +443,6 @@ Output plugin for GStreamer for use with the nas sound server.
 %files -n %bname-nas
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstnassink.so
-%endif
 
 %files -n %libname
 %defattr(-, root, root)
