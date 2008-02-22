@@ -255,7 +255,9 @@ This is the GStreamer application library.
 %prep
 %setup -q -n gst-plugins-bad-%{version}
 %patch1 -p1
-%patch2 -p1
+cd tests/check
+%patch2 -p0
+cd ../..
 aclocal -I common/m4 -I m4
 autoconf
 automake
