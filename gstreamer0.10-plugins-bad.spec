@@ -1,6 +1,6 @@
 %define version 0.10.6
 
-%define release %mkrel 2
+%define release %mkrel 3
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -51,6 +51,7 @@ BuildRequires: libSDL-devel
 BuildRequires: libbzip2-devel
 BuildRequires: libmodplug-devel
 BuildRequires: libmusicbrainz-devel
+BuildRequires: exempi-devel
 # gw it checks for libdc1394-2 = 2.0.0-rc5
 # BuildRequires: libdc1394-devel
 %ifarch %ix86
