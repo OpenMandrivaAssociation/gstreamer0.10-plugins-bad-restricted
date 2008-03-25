@@ -1,6 +1,6 @@
 %define version 0.10.6
 
-%define release %mkrel 4
+%define release %mkrel 5
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -256,6 +256,14 @@ Requires: %libname = %version
 This is the GStreamer application library.
 
 
+%package doc
+Group: Books/Computer books
+Summary: GStreamer application library
+Requires: %libname = %version
+%description doc
+This is the documentation of %name.
+
+
 
 %prep
 %setup -q -n gst-plugins-bad-%{version}
@@ -309,9 +317,13 @@ rm -rf $RPM_BUILD_ROOT
 %post -n %libname -p /sbin/ldconfig
 %postun -n %libname -p /sbin/ldconfig
 
+%files doc
+%defattr(-, root, root)
+%doc docs/plugins/html
+
 %files -f gst-plugins-bad-%majorminor.lang
 %defattr(-, root, root)
-%doc AUTHORS COPYING README NEWS docs/plugins/html
+%doc AUTHORS COPYING README NEWS 
 %_libdir/gstreamer-%majorminor/libgstapp.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstdvb.so
