@@ -1,6 +1,6 @@
-%define version 0.10.6
+%define version 0.10.7
 
-%define release %mkrel 5
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -34,14 +34,9 @@ Release: 	%release
 License: 	LGPL
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
-# gw: fix configure check for nas
-Patch: gst-plugins-bad-0.10.6-nas.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-Patch2: gst-plugins-bad-0.10.6-disable-directfb-in-generic-states-check.patch
-#gw from Debian/upstream CVS: fix AAC header check 
-Patch3: 10_fix-faad-header-check.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -89,6 +84,18 @@ work on.
 This package is in PLF as it violates some patents.
 %endif
 
+%package -n %bname-ofa
+Summary: GStreamer OFA plugin
+Group: Sound
+BuildRequires: libofa-devel
+%description -n %bname-ofa
+This is a metadata support plugin for GStreamer based on the Open
+Fingerprint Architecture library.
+
+%files -n %bname-ofa
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstofa.so
+
 %package -n %bname-mpeg2enc
 Summary:       GStreamer mjpegtools plug-in
 Group:         Video
@@ -100,6 +107,19 @@ mjpegtools-based encoding and decoding plug-in.
 %files -n %bname-mpeg2enc
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstmpeg2enc.so
+%_libdir/gstreamer-%majorminor/libgstmplex.so
+
+%package -n %bname-dirac
+Summary:       GStreamer dirac plug-in
+Group:         Video
+BuildRequires: libdirac-devel >= 0.9
+
+%description -n %bname-dirac
+Dirac encoding and decoding plug-in.
+
+%files -n %bname-dirac
+%defattr(-, root, root)
+%{_libdir}/gstreamer-%{majorminor}/libgstdirac.so
 
 ### LADSPA ###
 %package -n %bname-ladspa
@@ -267,12 +287,7 @@ This is the documentation of %name.
 
 %prep
 %setup -q -n gst-plugins-bad-%{version}
-%patch -p1
 %patch1 -p1
-cd tests/check
-%patch2 -p0
-cd ../..
-%patch3 -p0
 aclocal -I common/m4 -I m4
 autoconf
 automake
@@ -297,8 +312,7 @@ automake
 
 %check
 cd tests/check
-# souphttpsrc fails
-#make check
+make check
 
 %install
 rm -rf %buildroot gst-plugins-base-%majorminor.lang
@@ -336,6 +350,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstmpeg4videoparse.so
 %_libdir/gstreamer-%majorminor/libgstmpegtsparse.so
 %_libdir/gstreamer-%majorminor/libgstmve.so
+%_libdir/gstreamer-%majorminor/libgstoss4audio.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
 %_libdir/gstreamer-%majorminor/libgstrtpmanager.so
@@ -344,6 +359,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstsndfile.so
 %_libdir/gstreamer-%majorminor/libgstspeexresample.so
 %_libdir/gstreamer-%majorminor/libgststereo.so
+%_libdir/gstreamer-%majorminor/libgstsubenc.so
 %_libdir/gstreamer-%majorminor/libgstvcdsrc.so
 %_libdir/gstreamer-%majorminor/libgstvideosignal.so
 %_libdir/gstreamer-%majorminor/libgstvmnc.so
@@ -439,20 +455,6 @@ Plug-in for HTTP access based on libneon.
 %files -n %bname-neon
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstneonhttpsrc.so
-
-
-%package -n %bname-soup
-Summary:  GStreamer HTTP plugin based on libsoup
-Group:    System/Libraries
-Requires: %bname-plugins = %{version}
-BuildRequires: libsoup-devel >= 2.3
-
-%description -n %bname-soup
-Plug-in for HTTP access based on libsoup.
-
-%files -n %bname-soup
-%defattr(-, root, root)
-%_libdir/gstreamer-%majorminor/libgstsouphttpsrc.so
 
 %package -n %bname-nas
 Summary:  Gstreamer output plugin for the NAS sound server
