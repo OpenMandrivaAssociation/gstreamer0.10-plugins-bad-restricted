@@ -1,6 +1,6 @@
 %define version 0.10.7
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -49,8 +49,6 @@ BuildRequires: libbzip2-devel
 BuildRequires: libmodplug-devel
 BuildRequires: libmusicbrainz-devel
 BuildRequires: exempi-devel
-# gw it checks for libdc1394-2 = 2.0.0-rc5
-# BuildRequires: libdc1394-devel
 %ifarch %ix86
 BuildRequires: nasm => 0.90
 %endif
@@ -84,6 +82,19 @@ work on.
 This package is in PLF as it violates some patents.
 %endif
 
+
+%package -n %bname-dc1394
+Summary: GStreamer DC1394 plugin
+Group: System/Libraries
+BuildRequires: libdc1394-20-devel
+
+%description -n %bname-dc1394
+This is a IEEE 1394 (Firewire) support plugin for GStreamer.
+
+%files -n %bname-dc1394
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstdc1394.so
+
 %package -n %bname-ofa
 Summary: GStreamer OFA plugin
 Group: Sound
@@ -95,6 +106,17 @@ Fingerprint Architecture library.
 %files -n %bname-ofa
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstofa.so
+
+%package -n %bname-wildmidi
+Summary: GStreamer wildmidi plugin
+Group: Sound
+BuildRequires: wildmidi-devel
+%description -n %bname-wildmidi
+This is a MIDI plugin for GStreamer based on the wildmidi library.
+
+%files -n %bname-wildmidi
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstwildmidi.so
 
 %package -n %bname-mpeg2enc
 Summary:       GStreamer mjpegtools plug-in
