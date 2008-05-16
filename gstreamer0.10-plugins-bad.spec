@@ -34,6 +34,7 @@ Release: 	%release
 License: 	LGPL
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
+Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
@@ -111,6 +112,7 @@ Fingerprint Architecture library.
 Summary: GStreamer wildmidi plugin
 Group: Sound
 BuildRequires: wildmidi-devel
+Requires: timidity-instruments
 %description -n %bname-wildmidi
 This is a MIDI plugin for GStreamer based on the wildmidi library.
 
@@ -309,6 +311,7 @@ This is the documentation of %name.
 
 %prep
 %setup -q -n gst-plugins-bad-%{version}
+%patch -p1
 %patch1 -p1
 aclocal -I common/m4 -I m4
 autoconf
