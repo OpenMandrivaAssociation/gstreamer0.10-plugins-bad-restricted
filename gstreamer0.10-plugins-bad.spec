@@ -1,6 +1,6 @@
 %define version 0.10.7
 
-%define release %mkrel 6
+%define release %mkrel 7
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -14,6 +14,7 @@
 %define build_xvid 0
 %define build_x264 0
 %define build_dts 0
+%define build_dirac 0
 %if %build_plf
 %define distsuffix plf
 %define build_amrwb 1
@@ -133,6 +134,7 @@ mjpegtools-based encoding and decoding plug-in.
 %{_libdir}/gstreamer-%{majorminor}/libgstmpeg2enc.so
 %_libdir/gstreamer-%majorminor/libgstmplex.so
 
+%if %build_dirac
 %package -n %bname-dirac
 Summary:       GStreamer dirac plug-in
 Group:         Video
@@ -144,6 +146,7 @@ Dirac encoding and decoding plug-in.
 %files -n %bname-dirac
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstdirac.so
+%endif
 
 ### LADSPA ###
 %package -n %bname-ladspa
@@ -332,6 +335,9 @@ automake
 %if ! %build_faad
 	--disable-faad \
 %endif
+%if ! %build_dirac
+        --disable-dirac \
+%endif
 
 %make
 
@@ -355,8 +361,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %mdkversion < 200900
 %post -n %libname -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
 %postun -n %libname -p /sbin/ldconfig
 %endif
 
