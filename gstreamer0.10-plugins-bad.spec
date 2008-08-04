@@ -1,6 +1,6 @@
-%define version 0.10.7
+%define version 0.10.8
 
-%define release %mkrel 7
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -32,7 +32,7 @@ Summary: 	GStreamer Streaming-media framework plug-ins
 Name: 		%name
 Version: 	%version
 Release: 	%release
-License: 	LGPL
+License: 	LGPLv2+ and GPLv2+
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
 Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
@@ -378,7 +378,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
 %_libdir/gstreamer-%majorminor/libgstflvdemux.so
-%_libdir/gstreamer-%majorminor/libgstinterleave.so
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
 %_libdir/gstreamer-%majorminor/libgstmpeg4videoparse.so
 %_libdir/gstreamer-%majorminor/libgstmpegtsparse.so
@@ -407,7 +406,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstmodplug.so
 %_libdir/gstreamer-%majorminor/libgstnsf.so
 %_libdir/gstreamer-%majorminor/libgstnuvdemux.so
-%_libdir/gstreamer-%majorminor/libgstreplaygain.so
 %_libdir/gstreamer-%majorminor/libgstrfbsrc.so
 %_libdir/gstreamer-%majorminor/libgstsdl.so
 %_libdir/gstreamer-%majorminor/libgstspeed.so
