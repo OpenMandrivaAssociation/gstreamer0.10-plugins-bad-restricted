@@ -1,6 +1,6 @@
 %define version 0.10.8
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -41,6 +41,8 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
+# (fc) 0.10.8-2mdv ensure translated strings are encoded in UTF-8
+Patch2: gst-plugins-bad-0.10.8-utf8.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -332,6 +334,7 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
+%patch2 -p1 -b .utf8
 aclocal -I common/m4 -I m4
 autoconf
 automake
