@@ -8,6 +8,8 @@
 %define name %bname-plugins-bad
 %define build_plf 0
 %{?_with_plf: %{expand: %%global build_plf 1}}
+%define build_experimental 0
+%{?_with_experimental: %{expand: %%global build_experimental 1}}
 %define build_amrwb 0
 %define build_faac 0
 %define build_faad 0
@@ -289,6 +291,20 @@ Plug-in supporting several metadata formats.
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstmetadata.so
 
+%if %build_experimental
+%package -n %bname-resindvd
+Summary: GStreamer DVD menu plugin
+Group: Video
+BuildRequires: libdvdnav-devel
+
+%description -n %bname-resindvd
+This is a DVD playback plugin for GStreamer with menu support.
+
+%files -n %bname-resindvd
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libresindvd.so
+%endif
+
 %package -n %libname
 Group: System/Libraries
 Summary: GStreamer application library
@@ -337,6 +353,9 @@ automake
 %endif
 %if ! %build_dirac
         --disable-dirac \
+%endif
+%if %build_experimental
+	--enable-experimental
 %endif
 
 %make
@@ -400,6 +419,9 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstcdaudio.so
 %_libdir/gstreamer-%majorminor/libgstcdxaparse.so
 %_libdir/gstreamer-%majorminor/libgstdeinterlace.so
+%if %build_experimental
+%_libdir/gstreamer-%majorminor/libgstdeinterlace2.so
+%endif
 %_libdir/gstreamer-%majorminor/libgstfilter.so
 %_libdir/gstreamer-%majorminor/libgstfreeze.so
 %_libdir/gstreamer-%majorminor/libgsth264parse.so
