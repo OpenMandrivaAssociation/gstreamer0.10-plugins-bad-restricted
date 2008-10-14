@@ -1,6 +1,6 @@
 %define version 0.10.8
 
-%define release %mkrel 3
+%define release %mkrel 4
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -8,7 +8,7 @@
 %define name %bname-plugins-bad
 %define build_plf 0
 %{?_with_plf: %{expand: %%global build_plf 1}}
-%define build_experimental 0
+%define build_experimental 1
 %{?_with_experimental: %{expand: %%global build_experimental 1}}
 %define build_amrwb 0
 %define build_faac 0
