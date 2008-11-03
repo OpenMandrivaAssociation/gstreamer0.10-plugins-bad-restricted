@@ -17,6 +17,7 @@
 %define build_x264 0
 %define build_dts 0
 %define build_dirac 1
+%define build_celt 0
 %if %build_plf
 %define distsuffix plf
 %define build_amrwb 1
@@ -581,3 +582,19 @@ Plug-in for JPEG2000 support under GStreamer.
 %files -n %bname-jp2k
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstjp2k.so
+
+%if %build_celt
+%package -n %bname-celt
+Summary: GStreamer plug-in for CELT support
+Group:  Video
+Requires: %bname-plugins >= %{version}
+#gw 0.10.9 doesn't build with 0.5.0
+BuildRequires: celt-devel < 0.5.0
+
+%description -n %bname-celt
+Plug-in for CELT support under GStreamer.
+
+%files -n %bname-celt
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstcelt.so
+%endif
