@@ -1,6 +1,6 @@
-%define version 0.10.8
+%define version 0.10.9
 
-%define release %mkrel 6
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -16,7 +16,7 @@
 %define build_xvid 0
 %define build_x264 0
 %define build_dts 0
-%define build_dirac 0
+%define build_dirac 1
 %if %build_plf
 %define distsuffix plf
 %define build_amrwb 1
@@ -41,9 +41,7 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-# (fc) 0.10.8-2mdv ensure translated strings are encoded in UTF-8
-Patch2: gst-plugins-bad-0.10.8-utf8.patch
-Patch3: gst-plugins-bad-0.10.8-new-x264.patch
+Patch3: gst-plugins-bad-0.10.9-new-x264.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -56,6 +54,7 @@ BuildRequires: libbzip2-devel
 BuildRequires: libmodplug-devel
 BuildRequires: libmusicbrainz-devel
 BuildRequires: exempi-devel
+BuildRequires: openssl-devel
 %ifarch %ix86
 BuildRequires: nasm => 0.90
 %endif
@@ -335,7 +334,6 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
-%patch2 -p1 -b .utf8
 %patch3 -p1
 aclocal -I common/m4 -I m4
 autoconf
@@ -395,18 +393,24 @@ rm -rf $RPM_BUILD_ROOT
 %files -f gst-plugins-bad-%majorminor.lang
 %defattr(-, root, root)
 %doc AUTHORS COPYING README NEWS 
+%_libdir/gstreamer-%majorminor/libgstaiffparse.so
+%_libdir/gstreamer-%majorminor/libgstapexsink.so
 %_libdir/gstreamer-%majorminor/libgstapp.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
+%_libdir/gstreamer-%majorminor/libgstdccp.so
 %_libdir/gstreamer-%majorminor/libgstdvb.so
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
+%_libdir/gstreamer-%majorminor/libgstflv.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
-%_libdir/gstreamer-%majorminor/libgstflvdemux.so
+%_libdir/gstreamer-%majorminor/libgstmpegdemux.so
+%_libdir/gstreamer-%majorminor/libgstmpegtsmux.so
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
 %_libdir/gstreamer-%majorminor/libgstmpeg4videoparse.so
-%_libdir/gstreamer-%majorminor/libgstmpegtsparse.so
 %_libdir/gstreamer-%majorminor/libgstmve.so
 %_libdir/gstreamer-%majorminor/libgstoss4audio.so
+%_libdir/gstreamer-%majorminor/libgstpcapparse.so
+%_libdir/gstreamer-%majorminor/libgstscaletempoplugin.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
 %_libdir/gstreamer-%majorminor/libgstrtpmanager.so
@@ -551,3 +555,29 @@ This package is in PLF as it violates some patents.
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstamrwb.so
 %endif
+
+%package -n %bname-twolame
+Summary: GStreamer plug-in for MP2 encoding support
+Group:  Sound
+Requires: %bname-plugins >= %{version}
+BuildRequires: libtwolame-devel
+
+%description -n %bname-twolame
+Plug-in for encoding MP2 under GStreamer.
+
+%files -n %bname-twolame
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgsttwolame.so
+
+%package -n %bname-jp2k
+Summary: GStreamer plug-in for JPEG2000 support
+Group:  Graphics
+Requires: %bname-plugins >= %{version}
+BuildRequires: libjasper-devel
+
+%description -n %bname-jp2k
+Plug-in for JPEG2000 support under GStreamer.
+
+%files -n %bname-jp2k
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstjp2k.so
