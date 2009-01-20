@@ -1,6 +1,6 @@
-%define version 0.10.9
+%define version 0.10.10
 
-%define release %mkrel 2
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -28,9 +28,6 @@
 %define build_dts 1
 %endif
 
-%define libname %mklibname gstapp0.10_ 0
-%define libnamedev %mklibname -d gstapp0.10_ 0
-
 Summary: 	GStreamer Streaming-media framework plug-ins
 Name: 		%name
 Version: 	%version
@@ -42,7 +39,6 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-Patch3: gst-plugins-bad-0.10.9-new-x264.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -60,7 +56,8 @@ BuildRequires: openssl-devel
 BuildRequires: nasm => 0.90
 %endif
 BuildRequires: valgrind libcheck-devel
-BuildRequires: libgstreamer-plugins-base-devel >= %version
+BuildRequires: libgstreamer-plugins-base-devel >= 0.10.20
+BuildRequires: libgstreamer-devel >= 0.10.21.1
 BuildRequires: libcdaudio-devel
 BuildRequires: libsndfile-devel
 Provides:	%bname-audiosrc
@@ -310,24 +307,9 @@ This is a DVD playback plugin for GStreamer with menu support.
 %_libdir/gstreamer-%majorminor/libresindvd.so
 %endif
 
-%package -n %libname
-Group: System/Libraries
-Summary: GStreamer application library
-%description -n %libname
-This is the GStreamer application library.
-
-%package -n %libnamedev
-Group: Development/C
-Summary: GStreamer application library
-Requires: %libname = %version
-%description -n %libnamedev
-This is the GStreamer application library.
-
-
 %package doc
 Group: Books/Computer books
 Summary: GStreamer application library
-Requires: %libname = %version
 %description doc
 This is the documentation of %name.
 
@@ -337,7 +319,6 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
-%patch3 -p1
 aclocal -I common/m4 -I m4
 autoconf
 automake
@@ -350,6 +331,9 @@ automake
 %else
   --with-package-name='Mandriva %name package' \
   --with-package-origin='http://www.mandriva.com/' \
+%endif
+%if ! %build_celt
+	--disable-celt \
 %endif
 %if ! %build_faac
 	--disable-faac \
@@ -384,11 +368,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%if %mdkversion < 200900
-%post -n %libname -p /sbin/ldconfig
-%postun -n %libname -p /sbin/ldconfig
-%endif
-
 %files doc
 %defattr(-, root, root)
 %doc docs/plugins/html
@@ -396,9 +375,10 @@ rm -rf $RPM_BUILD_ROOT
 %files -f gst-plugins-bad-%majorminor.lang
 %defattr(-, root, root)
 %doc AUTHORS COPYING README NEWS 
+%_libdir/gstreamer-%majorminor/libgstaacparse.so
 %_libdir/gstreamer-%majorminor/libgstaiffparse.so
+%_libdir/gstreamer-%majorminor/libgstamrparse.so
 %_libdir/gstreamer-%majorminor/libgstapexsink.so
-%_libdir/gstreamer-%majorminor/libgstapp.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstdccp.so
 %_libdir/gstreamer-%majorminor/libgstdvb.so
@@ -406,13 +386,16 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
 %_libdir/gstreamer-%majorminor/libgstflv.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
+%_libdir/gstreamer-%majorminor/libgstlegacyresample.so
 %_libdir/gstreamer-%majorminor/libgstmpegdemux.so
 %_libdir/gstreamer-%majorminor/libgstmpegtsmux.so
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
 %_libdir/gstreamer-%majorminor/libgstmpeg4videoparse.so
 %_libdir/gstreamer-%majorminor/libgstmve.so
+%_libdir/gstreamer-%majorminor/libgstmxf.so
 %_libdir/gstreamer-%majorminor/libgstoss4audio.so
 %_libdir/gstreamer-%majorminor/libgstpcapparse.so
+%_libdir/gstreamer-%majorminor/libgstqtmux.so
 %_libdir/gstreamer-%majorminor/libgstscaletempoplugin.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
@@ -420,7 +403,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstsdpelem.so
 %_libdir/gstreamer-%majorminor/libgstselector.so
 %_libdir/gstreamer-%majorminor/libgstsndfile.so
-%_libdir/gstreamer-%majorminor/libgstspeexresample.so
 %_libdir/gstreamer-%majorminor/libgststereo.so
 %_libdir/gstreamer-%majorminor/libgstsubenc.so
 %_libdir/gstreamer-%majorminor/libgstvcdsrc.so
@@ -533,15 +515,6 @@ Output plugin for GStreamer for use with the nas sound server.
 %files -n %bname-nas
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstnassink.so
-
-%files -n %libname
-%defattr(-, root, root)
-%_libdir/libgstapp-0.10.so.0*
-
-%files -n %libnamedev
-%defattr(-, root, root)
-%_libdir/libgstapp-0.10.so
-%_includedir/gstreamer-0.10/gst/app/
 
 %if %build_amrwb
 %package -n %bname-amrwb
