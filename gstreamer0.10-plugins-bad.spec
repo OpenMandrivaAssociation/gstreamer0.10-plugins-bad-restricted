@@ -42,6 +42,8 @@ Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
 # faad: Use the public headers if faad2 >= 2.7. Fixes #573369
 # (crash on x86_64)
 Patch2: gst-plugins-bad-bdc9c5618a6d8f49c1efa3c05319d84087c0f455.patch
+#gw fix faad configure check
+Patch3: gst-plugins-bad-60080ee20bb900221ff2cfb8ca44db8cb3010542.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -323,6 +325,7 @@ This is the documentation of %name.
 %patch -p1
 %patch1 -p1
 %patch2 -p1 -F 2
+%patch3 -p1
 aclocal -I common/m4 -I m4
 autoconf
 automake
