@@ -1,6 +1,6 @@
-%define version 0.10.10
+%define version 0.10.11
 
-%define release %mkrel 3
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -28,6 +28,10 @@
 %define build_dts 1
 %endif
 
+%define libmajor 0
+%define libname %mklibname gstphotography %major %libmajor
+%define develname %mklibname -d gstphotography
+
 Summary: 	GStreamer Streaming-media framework plug-ins
 Name: 		%name
 Version: 	%version
@@ -39,12 +43,6 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-# faad: Use the public headers if faad2 >= 2.7. Fixes #573369
-# (crash on x86_64)
-# rediff from commit bdc9c5618a6d8f49c1efa3c05319d84087c0f455
-Patch2: gst-plugins-bad-faad2.7.patch
-#gw fix faad configure check
-Patch3: gst-plugins-bad-60080ee20bb900221ff2cfb8ca44db8cb3010542.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -93,6 +91,39 @@ work on.
 %if %build_plf
 This package is in PLF as it violates some patents.
 %endif
+
+
+%package -n %libname
+Summary: Libraries for GStreamer streaming-media framework
+Group: System/Libraries
+Requires: %name-tools >= %version-%release
+
+%description -n %libname
+GStreamer is a streaming-media framework, based on graphs of filters which
+operate on media data. Applications using this library can do anything
+from real-time sound processing to playing videos, and just about anything
+else media-related.  Its plugin-based architecture means that new data
+types or processing capabilities can be added simply by installing new
+plugins.
+
+This package contains the libraries.
+
+%package -n %develname
+Summary: Libraries and include files for GStreamer streaming-media framework
+Group: Development/C
+Requires: %{libname} = %{version}
+Provides: libgstphotography-devel = %version-%release
+
+%description -n %develname
+GStreamer is a streaming-media framework, based on graphs of filters which
+operate on media data. Applications using this library can do anything
+from real-time sound processing to playing videos, and just about anything
+else media-related.  Its plugin-based architecture means that new data
+types or processing capabilities can be added simply by installing new   
+plugins.
+
+This package contains the libraries and includes files necessary to develop
+applications and plugins for GStreamer.
 
 
 %package -n %bname-dc1394
@@ -325,11 +356,6 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
-aclocal -I common/m4 -I m4
-autoconf
-automake
 
 %build
 %configure2_5x --disable-dependency-tracking \
@@ -376,6 +402,11 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%if %mdkversion < 200900
+%post -n %libname -p /sbin/ldconfig
+%postun -n %libname -p /sbin/ldconfig
+%endif
+
 %files doc
 %defattr(-, root, root)
 %doc docs/plugins/html
@@ -387,14 +418,18 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstaiffparse.so
 %_libdir/gstreamer-%majorminor/libgstamrparse.so
 %_libdir/gstreamer-%majorminor/libgstapexsink.so
+%_libdir/gstreamer-%majorminor/libgstautoconvert.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
+%_libdir/gstreamer-%majorminor/libgstcamerabin.so
 %_libdir/gstreamer-%majorminor/libgstdccp.so
+%_libdir/gstreamer-%majorminor/libgstdtmf.so
 %_libdir/gstreamer-%majorminor/libgstdvb.so
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
 %_libdir/gstreamer-%majorminor/libgstflv.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
+%_libdir/gstreamer-%majorminor/libgstliveadder.so
 %_libdir/gstreamer-%majorminor/libgstmpegdemux.so
 %_libdir/gstreamer-%majorminor/libgstmpegtsmux.so
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
@@ -408,11 +443,14 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
 %_libdir/gstreamer-%majorminor/libgstrtpmanager.so
+%_libdir/gstreamer-%majorminor/libgstrtpmux.so
 %_libdir/gstreamer-%majorminor/libgstsdpelem.so
 %_libdir/gstreamer-%majorminor/libgstselector.so
+%_libdir/gstreamer-%majorminor/libgstsiren.so
 %_libdir/gstreamer-%majorminor/libgstsndfile.so
 %_libdir/gstreamer-%majorminor/libgststereo.so
 %_libdir/gstreamer-%majorminor/libgstsubenc.so
+%_libdir/gstreamer-%majorminor/libgstvalve.so
 %_libdir/gstreamer-%majorminor/libgstvcdsrc.so
 %_libdir/gstreamer-%majorminor/libgstvideosignal.so
 %_libdir/gstreamer-%majorminor/libgstvmnc.so
@@ -424,7 +462,6 @@ rm -rf $RPM_BUILD_ROOT
 %if %build_experimental
 %_libdir/gstreamer-%majorminor/libgstdeinterlace2.so
 %endif
-%_libdir/gstreamer-%majorminor/libgstfilter.so
 %_libdir/gstreamer-%majorminor/libgstfreeze.so
 %_libdir/gstreamer-%majorminor/libgsth264parse.so
 %_libdir/gstreamer-%majorminor/libgstmodplug.so
@@ -436,6 +473,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgsttrm.so
 %_libdir/gstreamer-%majorminor/libgsttta.so
 %_libdir/gstreamer-%majorminor/libgsty4menc.so
+%_libdir/gstreamer-%majorminor/libgstxdgmime.so
 
 %if %build_faad
 %package -n %bname-faad
@@ -540,19 +578,6 @@ This package is in PLF as it violates some patents.
 %{_libdir}/gstreamer-%{majorminor}/libgstamrwb.so
 %endif
 
-%package -n %bname-twolame
-Summary: GStreamer plug-in for MP2 encoding support
-Group:  Sound
-Requires: %bname-plugins >= %{version}
-BuildRequires: libtwolame-devel
-
-%description -n %bname-twolame
-Plug-in for encoding MP2 under GStreamer.
-
-%files -n %bname-twolame
-%defattr(-, root, root)
-%_libdir/gstreamer-%majorminor/libgsttwolame.so
-
 %package -n %bname-jp2k
 Summary: GStreamer plug-in for JPEG2000 support
 Group:  Graphics
@@ -581,3 +606,13 @@ Plug-in for CELT support under GStreamer.
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstcelt.so
 %endif
+
+%files -n %libname
+%defattr(-, root, root)
+%{_libdir}/libgstphotography-%majorminor.so.%{libmajor}*
+
+%files -n %develname
+%defattr(-, root, root)
+%{_libdir}/libgstphotography-%majorminor.so
+%_includedir/gstreamer-0.10/gst/interfaces/photography*
+
