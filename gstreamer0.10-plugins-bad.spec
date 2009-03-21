@@ -1,6 +1,6 @@
 %define version 0.10.11
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -64,6 +64,7 @@ BuildRequires: libgstreamer-plugins-base-devel >= 0.10.20
 BuildRequires: libgstreamer-devel >= 0.10.21.1
 BuildRequires: libcdaudio-devel
 BuildRequires: libsndfile-devel
+BuildRequires: libmimic-devel
 Provides:	%bname-audiosrc
 Provides:	%bname-audiosink
 Obsoletes:	gstreamer0.10-fluendo-mpegdemux <= 0.10.15
@@ -435,6 +436,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
 %_libdir/gstreamer-%majorminor/libgstmpeg4videoparse.so
 %_libdir/gstreamer-%majorminor/libgstmve.so
+%_libdir/gstreamer-%majorminor/libgstmimic.so
 %_libdir/gstreamer-%majorminor/libgstmxf.so
 %_libdir/gstreamer-%majorminor/libgstoss4audio.so
 %_libdir/gstreamer-%majorminor/libgstpcapparse.so
