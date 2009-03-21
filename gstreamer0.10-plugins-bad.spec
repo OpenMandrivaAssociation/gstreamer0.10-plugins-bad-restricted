@@ -68,6 +68,7 @@ Provides:	%bname-audiosrc
 Provides:	%bname-audiosink
 Obsoletes:	gstreamer0.10-fluendo-mpegdemux <= 0.10.15
 Provides:	gstreamer0.10-fluendo-mpegdemux
+Conflicts: %bname-farsight <= 1:0.12.10
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters which
