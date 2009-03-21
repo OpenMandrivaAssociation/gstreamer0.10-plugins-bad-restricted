@@ -96,7 +96,6 @@ This package is in PLF as it violates some patents.
 %package -n %libname
 Summary: Libraries for GStreamer streaming-media framework
 Group: System/Libraries
-Requires: %name-tools >= %version-%release
 
 %description -n %libname
 GStreamer is a streaming-media framework, based on graphs of filters which
