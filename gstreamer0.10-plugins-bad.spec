@@ -1,6 +1,6 @@
 %define version 0.10.11
 
-%define release %mkrel 2
+%define release %mkrel 3
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -43,6 +43,11 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
+#gw aacparse: Refactor check_valid_frame to expose broken code
+#needed by patch 3
+Patch2: gst-plugins-bad-3f90e6ff137d3e6e952b6c1550bd8a535d7fc391.patch
+#gw Fix busyloop when seeking. Fixes b.g.o #575388
+Patch3: gst-plugins-bad-83016fa9dc4d3229aae00ce53488a6375ca43132.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -357,6 +362,8 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 %configure2_5x --disable-dependency-tracking \
