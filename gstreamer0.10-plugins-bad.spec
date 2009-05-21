@@ -1,6 +1,6 @@
-%define version 0.10.11
+%define version 0.10.12
 
-%define release %mkrel 3
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -17,7 +17,7 @@
 %define build_x264 0
 %define build_dts 0
 %define build_dirac 1
-%define build_celt 0
+%define build_celt 1
 %if %build_plf
 %define distsuffix plf
 %define build_amrwb 1
@@ -43,11 +43,6 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-#gw aacparse: Refactor check_valid_frame to expose broken code
-#needed by patch 3
-Patch2: gst-plugins-bad-3f90e6ff137d3e6e952b6c1550bd8a535d7fc391.patch
-#gw Fix busyloop when seeking. Fixes b.g.o #575388
-Patch3: gst-plugins-bad-83016fa9dc4d3229aae00ce53488a6375ca43132.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -362,8 +357,6 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 %build
 %configure2_5x --disable-dependency-tracking \
@@ -430,11 +423,11 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstcamerabin.so
 %_libdir/gstreamer-%majorminor/libgstdccp.so
+%_libdir/gstreamer-%majorminor/libgstdebugutilsbad.so
 %_libdir/gstreamer-%majorminor/libgstdtmf.so
 %_libdir/gstreamer-%majorminor/libgstdvb.so
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
-%_libdir/gstreamer-%majorminor/libgstflv.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
 %_libdir/gstreamer-%majorminor/libgstliveadder.so
@@ -467,9 +460,8 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstbz2.so
 %_libdir/gstreamer-%majorminor/libgstcdaudio.so
 %_libdir/gstreamer-%majorminor/libgstcdxaparse.so
-%_libdir/gstreamer-%majorminor/libgstdeinterlace.so
 %if %build_experimental
-%_libdir/gstreamer-%majorminor/libgstdeinterlace2.so
+#%_libdir/gstreamer-%majorminor/libgstdeinterlace2.so
 %endif
 %_libdir/gstreamer-%majorminor/libgstfreeze.so
 %_libdir/gstreamer-%majorminor/libgsth264parse.so
@@ -481,7 +473,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstspeed.so
 %_libdir/gstreamer-%majorminor/libgsttrm.so
 %_libdir/gstreamer-%majorminor/libgsttta.so
-%_libdir/gstreamer-%majorminor/libgsty4menc.so
 %_libdir/gstreamer-%majorminor/libgstxdgmime.so
 
 %if %build_faad
@@ -605,8 +596,7 @@ Plug-in for JPEG2000 support under GStreamer.
 Summary: GStreamer plug-in for CELT support
 Group:  Video
 Requires: %bname-plugins >= %{version}
-#gw 0.10.9 doesn't build with 0.5.0
-BuildRequires: celt-devel < 0.5.0
+BuildRequires: celt-devel
 
 %description -n %bname-celt
 Plug-in for CELT support under GStreamer.
