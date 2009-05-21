@@ -62,6 +62,8 @@ BuildRequires: nasm => 0.90
 BuildRequires: valgrind libcheck-devel
 BuildRequires: libgstreamer-plugins-base-devel >= 0.10.20
 BuildRequires: libgstreamer-devel >= 0.10.21.1
+#gw for checks
+BuildRequires: gstreamer0.10-plugins-good
 BuildRequires: libcdaudio-devel
 BuildRequires: libsndfile-devel
 BuildRequires: libmimic-devel
