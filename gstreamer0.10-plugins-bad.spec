@@ -1,6 +1,6 @@
-%define version 0.10.12
+%define version 0.10.13
 
-%define release %mkrel 3
+%define release %mkrel 1
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -14,7 +14,6 @@
 %define build_faac 0
 %define build_faad 0
 %define build_xvid 0
-%define build_x264 0
 %define build_dts 0
 %define build_dirac 1
 %define build_celt 1
@@ -23,7 +22,6 @@
 %define build_amrwb 1
 %define build_faac 1
 %define build_faad 1
-%define build_x264 1
 %define build_xvid 1
 %define build_dts 1
 %endif
@@ -251,22 +249,6 @@ This package is in PLF as it violates some patents.
 %_libdir/gstreamer-%{majorminor}/libgstxvid.so
 %endif
 
-%if %build_x264
-%package -n %bname-x264
-Summary:GStreamer plug-in for H264/AVC video encoding
-Group:         Video
-BuildRequires: libx264-devel
- 
-%description -n %bname-x264
-Plug-in for encoding H264/AVC video.
- 
-This package is in PLF as it violates some patents.
-%files -n %bname-x264
-%defattr(-, root, root)
-%_libdir/gstreamer-%{majorminor}/libgstx264.so
-%_datadir/gstreamer-%majorminor/presets/GstX264Enc.prs
-%endif
-
 %package -n %bname-musepack
 Summary:GStreamer plug-in Musepack playback
 Group:         Sound
@@ -419,6 +401,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-, root, root)
 %doc AUTHORS COPYING README NEWS 
 %_libdir/gstreamer-%majorminor/libgstaacparse.so
+%_libdir/gstreamer-%majorminor/libgstadpcmdec.so
 %_libdir/gstreamer-%majorminor/libgstaiffparse.so
 %_libdir/gstreamer-%majorminor/libgstamrparse.so
 %_libdir/gstreamer-%majorminor/libgstapexsink.so
@@ -432,6 +415,8 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
+%_libdir/gstreamer-%majorminor/libgsthdvparse.so
+%_libdir/gstreamer-%majorminor/libgstid3tag.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
 %_libdir/gstreamer-%majorminor/libgstliveadder.so
 %_libdir/gstreamer-%majorminor/libgstmpegdemux.so
@@ -445,6 +430,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstpcapparse.so
 %_libdir/gstreamer-%majorminor/libgstqtmux.so
 %_libdir/gstreamer-%majorminor/libgstscaletempoplugin.so
+%_libdir/gstreamer-%majorminor/libgstshapewipe.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
 %_libdir/gstreamer-%majorminor/libgstrtpmanager.so
