@@ -1,4 +1,4 @@
-%define version 0.10.13
+%define version 0.10.14
 
 %define release %mkrel 1
 %define         _glib2          2.2
@@ -16,6 +16,7 @@
 %define build_xvid 0
 %define build_dts 0
 %define build_dirac 1
+%define build_gme 1
 %define build_celt 1
 %if %build_plf
 %define distsuffix plf
@@ -27,8 +28,10 @@
 %endif
 
 %define libmajor 0
-%define libname %mklibname gstphotography %major %libmajor
-%define develname %mklibname -d gstphotography
+%define libnamephoto %mklibname gstphotography %major %libmajor
+%define develnamephoto %mklibname -d gstphotography
+%define libnamebase %mklibname gstbasevideo %major %libmajor
+%define develnamebase %mklibname -d gstbasevideo
 
 Summary: 	GStreamer Streaming-media framework plug-ins
 Name: 		%name
@@ -95,11 +98,11 @@ This package is in PLF as it violates some patents.
 %endif
 
 
-%package -n %libname
+%package -n %libnamephoto
 Summary: Libraries for GStreamer streaming-media framework
 Group: System/Libraries
 
-%description -n %libname
+%description -n %libnamephoto
 GStreamer is a streaming-media framework, based on graphs of filters which
 operate on media data. Applications using this library can do anything
 from real-time sound processing to playing videos, and just about anything
@@ -109,13 +112,44 @@ plugins.
 
 This package contains the libraries.
 
-%package -n %develname
+%package -n %develnamephoto
 Summary: Libraries and include files for GStreamer streaming-media framework
 Group: Development/C
-Requires: %{libname} = %{version}
+Requires: %{libnamephoto} = %{version}
 Provides: libgstphotography-devel = %version-%release
 
-%description -n %develname
+%description -n %develnamephoto
+GStreamer is a streaming-media framework, based on graphs of filters which
+operate on media data. Applications using this library can do anything
+from real-time sound processing to playing videos, and just about anything
+else media-related.  Its plugin-based architecture means that new data
+types or processing capabilities can be added simply by installing new   
+plugins.
+
+This package contains the libraries and includes files necessary to develop
+applications and plugins for GStreamer.
+
+%package -n %libnamebase
+Summary: Libraries for GStreamer streaming-media framework
+Group: System/Libraries
+
+%description -n %libnamebase
+GStreamer is a streaming-media framework, based on graphs of filters which
+operate on media data. Applications using this library can do anything
+from real-time sound processing to playing videos, and just about anything
+else media-related.  Its plugin-based architecture means that new data
+types or processing capabilities can be added simply by installing new
+plugins.
+
+This package contains the libraries.
+
+%package -n %develnamebase
+Summary: Libraries and include files for GStreamer streaming-media framework
+Group: Development/C
+Requires: %{libnamebase} = %{version}
+Provides: libgstbasevideo-devel = %version-%release
+
+%description -n %develnamebase
 GStreamer is a streaming-media framework, based on graphs of filters which
 operate on media data. Applications using this library can do anything
 from real-time sound processing to playing videos, and just about anything
@@ -176,6 +210,21 @@ mjpegtools-based encoding and decoding plug-in.
 %{_libdir}/gstreamer-%{majorminor}/libgstmpeg2enc.so
 %_libdir/gstreamer-%majorminor/libgstmplex.so
 
+%if %build_gme
+%package -n %bname-gme
+Summary:       GStreamer Game Music plug-in
+Group:         Sound
+BuildRequires: libgme-devel
+
+%description -n %bname-gme
+Game Music decoding plug-in.
+
+%files -n %bname-gme
+%defattr(-, root, root)
+%{_libdir}/gstreamer-%{majorminor}/libgstgme.so
+%endif
+
+
 %if %build_dirac
 %package -n %bname-dirac
 Summary:       GStreamer dirac plug-in
@@ -189,6 +238,18 @@ Dirac encoding and decoding plug-in.
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstdirac.so
 %endif
+
+%package -n %bname-schroedinger
+Summary:       GStreamer dirac plug-in based on Schroedinger
+Group:         Video
+BuildRequires: libschroedinger-devel
+
+%description -n %bname-schroedinger
+Dirac encoding and decoding plug-in based on Schroedinger.
+
+%files -n %bname-schroedinger
+%defattr(-, root, root)
+%{_libdir}/gstreamer-%{majorminor}/libgstschro.so
 
 ### LADSPA ###
 %package -n %bname-ladspa
@@ -389,8 +450,10 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 rm -rf $RPM_BUILD_ROOT
 
 %if %mdkversion < 200900
-%post -n %libname -p /sbin/ldconfig
-%postun -n %libname -p /sbin/ldconfig
+%post -n %libnamephoto -p /sbin/ldconfig
+%postun -n %libnamephoto -p /sbin/ldconfig
+%post -n %libnamebase -p /sbin/ldconfig
+%postun -n %libnamebase -p /sbin/ldconfig
 %endif
 
 %files doc
@@ -405,6 +468,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstaiffparse.so
 %_libdir/gstreamer-%majorminor/libgstamrparse.so
 %_libdir/gstreamer-%majorminor/libgstapexsink.so
+%_libdir/gstreamer-%majorminor/libgstasfmux.so
 %_libdir/gstreamer-%majorminor/libgstautoconvert.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstcamerabin.so
@@ -415,6 +479,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
+%_libdir/gstreamer-%majorminor/libgstfrei0r.so
 %_libdir/gstreamer-%majorminor/libgsthdvparse.so
 %_libdir/gstreamer-%majorminor/libgstid3tag.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
@@ -433,7 +498,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstshapewipe.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
-%_libdir/gstreamer-%majorminor/libgstrtpmanager.so
 %_libdir/gstreamer-%majorminor/libgstrtpmux.so
 %_libdir/gstreamer-%majorminor/libgstsdpelem.so
 %_libdir/gstreamer-%majorminor/libgstselector.so
@@ -464,9 +528,35 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgsttta.so
 %_libdir/gstreamer-%majorminor/libgstxdgmime.so
 
+%package examples
+Summary:GStreamer example applications
+Group: Video
+
+%description examples
+This contains example applications to test %{name}
+
+%files examples
+%defattr(-, root, root)
+%_bindir/gst-camera
+%_bindir/gst-camera-perf
+%_datadir/gstreamer-%majorminor/camera-apps/
+
+%package -n %bname-vdpau
+Summary:GStreamer plug-in for playback using VDPAU
+Group: Video
+BuildRequires: vdpau-devel
+
+%description -n %bname-vdpau
+This plug-in adds video playback support to GStreamer based on VDPAU 
+(Video Decode and Presentation API for Unix).
+
+%files -n %bname-vdpau
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstvdpau.so
+
 %if %build_faad
 %package -n %bname-faad
-Summary:GStreamer plug-ins for AAC audio playback
+Summary:GStreamer plug-in for AAC audio playback
 Group:         Sound
 Requires: %bname-plugins >= %version
 BuildRequires: libfaad2-devel => 2.0
@@ -564,7 +654,8 @@ Plug-in for decoding AMR-WB under GStreamer.
 This package is in PLF as it violates some patents.
 %files -n %bname-amrwb
 %defattr(-, root, root)
-%{_libdir}/gstreamer-%{majorminor}/libgstamrwb.so
+%_datadir/gstreamer-%majorminor/presets/GstAmrwbEnc.prs
+%{_libdir}/gstreamer-%{majorminor}/libgstamrwbenc.so
 %endif
 
 %package -n %bname-jp2k
@@ -595,12 +686,23 @@ Plug-in for CELT support under GStreamer.
 %_libdir/gstreamer-%majorminor/libgstcelt.so
 %endif
 
-%files -n %libname
+%files -n %libnamephoto
 %defattr(-, root, root)
 %{_libdir}/libgstphotography-%majorminor.so.%{libmajor}*
+%{_libdir}/libgstsignalprocessor.so.%{libmajor}*
 
-%files -n %develname
+%files -n %develnamephoto
 %defattr(-, root, root)
 %{_libdir}/libgstphotography-%majorminor.so
+%{_libdir}/libgstsignalprocessor.so
 %_includedir/gstreamer-0.10/gst/interfaces/photography*
 
+%files -n %libnamebase
+%defattr(-, root, root)
+%defattr(-, root, root)
+%{_libdir}/libgstbasevideo-%majorminor.so.%{libmajor}*
+
+%files -n %develnamebase
+%defattr(-, root, root)
+%{_libdir}/libgstbasevideo-%majorminor.so
+%_includedir/gstreamer-0.10/gst/video/gstbasevideo*
