@@ -49,6 +49,7 @@ BuildRoot: 	%{_tmppath}/%{name}-%{version}-root
 #gw for the pixbuf plugin
 BuildRequires:  gtk+2-devel
 BuildRequires:  glib2-devel >= %_glib2 
+BuildRequires:  libglade2.0-devel
 BuildRequires: libpng-devel >= 1.2.4-4mdk
 BuildRequires: liboil-devel >= 0.3.2
 BuildRequires: libSDL-devel
