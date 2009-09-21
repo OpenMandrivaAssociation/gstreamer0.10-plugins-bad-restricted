@@ -1,6 +1,6 @@
 %define version 0.10.14
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -74,6 +74,8 @@ Provides:	%bname-audiosink
 Obsoletes:	gstreamer0.10-fluendo-mpegdemux <= 0.10.15
 Provides:	gstreamer0.10-fluendo-mpegdemux
 Conflicts: %bname-farsight <= 1:0.12.10
+Requires:	%bname-valve >= %{version}-%{release}
+Requires:	%bname-rtpmux >= %{version}-%{release}
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters which
@@ -392,6 +394,30 @@ This is a DVD playback plugin for GStreamer with menu support.
 %_libdir/gstreamer-%majorminor/libresindvd.so
 %endif
 
+%package -n %bname-valve
+Summary: GStreamer valve plugin
+Group: Sound
+Conflicts: gstreamer0.10-plugins-bad < 0.10.14-1mdv
+
+%description -n %bname-valve
+This is a valve plugin for GStreamer.
+
+%files -n %bname-valve
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstvalve.so
+
+%package -n %bname-rtpmux
+Summary: GStreamer rtp muxer plugin
+Group: Sound
+Conflicts: gstreamer0.10-plugins-bad < 0.10.14-1mdv
+
+%description -n %bname-rtpmux
+This is a RTP muxer plugin for GStreamer.
+
+%files -n %bname-rtpmux
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstrtpmux.so
+
 %package doc
 Group: Books/Computer books
 Summary: GStreamer application library
@@ -499,14 +525,12 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstshapewipe.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
-%_libdir/gstreamer-%majorminor/libgstrtpmux.so
 %_libdir/gstreamer-%majorminor/libgstsdpelem.so
 %_libdir/gstreamer-%majorminor/libgstselector.so
 %_libdir/gstreamer-%majorminor/libgstsiren.so
 %_libdir/gstreamer-%majorminor/libgstsndfile.so
 %_libdir/gstreamer-%majorminor/libgststereo.so
 %_libdir/gstreamer-%majorminor/libgstsubenc.so
-%_libdir/gstreamer-%majorminor/libgstvalve.so
 %_libdir/gstreamer-%majorminor/libgstvcdsrc.so
 %_libdir/gstreamer-%majorminor/libgstvideosignal.so
 %_libdir/gstreamer-%majorminor/libgstvmnc.so
@@ -620,7 +644,7 @@ Plug-in for rendering Flash animations using swfdec library
 Summary:  GStreamer HTTP plugin based on libneon
 Group:    System/Libraries
 Requires: %bname-plugins = %{version}
-BuildRequires: neon0.27-devel
+BuildRequires: neon0.26-devel
 
 %description -n %bname-neon
 Plug-in for HTTP access based on libneon.
