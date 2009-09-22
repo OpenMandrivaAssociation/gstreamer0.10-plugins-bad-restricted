@@ -166,7 +166,7 @@ applications and plugins for GStreamer.
 %package -n %bname-dc1394
 Summary: GStreamer DC1394 plugin
 Group: System/Libraries
-BuildRequires: libdc1394-20-devel
+BuildRequires: libdc1394-devel
 
 %description -n %bname-dc1394
 This is a IEEE 1394 (Firewire) support plugin for GStreamer.
