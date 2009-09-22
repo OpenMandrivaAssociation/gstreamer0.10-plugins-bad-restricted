@@ -1,6 +1,6 @@
 %define version 0.10.14
 
-%define release %mkrel 2
+%define release %mkrel 3
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -74,8 +74,7 @@ Provides:	%bname-audiosink
 Obsoletes:	gstreamer0.10-fluendo-mpegdemux <= 0.10.15
 Provides:	gstreamer0.10-fluendo-mpegdemux
 Conflicts: %bname-farsight <= 1:0.12.10
-Requires:	%bname-valve >= %{version}-%{release}
-Requires:	%bname-rtpmux >= %{version}-%{release}
+Requires:	%bname-voip >= %{version}-%{release}
 
 %description
 GStreamer is a streaming-media framework, based on graphs of filters which
@@ -394,29 +393,20 @@ This is a DVD playback plugin for GStreamer with menu support.
 %_libdir/gstreamer-%majorminor/libresindvd.so
 %endif
 
-%package -n %bname-valve
-Summary: GStreamer valve plugin
+%package -n %bname-voip
+Summary: GStreamer voip plugins
 Group: Sound
-Conflicts: gstreamer0.10-plugins-bad < 0.10.14-1mdv
+Conflicts: gstreamer0.10-plugins-bad < 0.10.14-3mdv
+ 
+%description -n %bname-voip
+This is a collection of VoIP plugins for GStreamer.
 
-%description -n %bname-valve
-This is a valve plugin for GStreamer.
-
-%files -n %bname-valve
+%files -n %bname-voip
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstvalve.so
-
-%package -n %bname-rtpmux
-Summary: GStreamer rtp muxer plugin
-Group: Sound
-Conflicts: gstreamer0.10-plugins-bad < 0.10.14-1mdv
-
-%description -n %bname-rtpmux
-This is a RTP muxer plugin for GStreamer.
-
-%files -n %bname-rtpmux
-%defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstrtpmux.so
+%_libdir/gstreamer-%majorminor/libgstliveadder.so
+%_libdir/gstreamer-%majorminor/libgstdtmf.so
 
 %package doc
 Group: Books/Computer books
@@ -501,7 +491,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstcamerabin.so
 %_libdir/gstreamer-%majorminor/libgstdccp.so
 %_libdir/gstreamer-%majorminor/libgstdebugutilsbad.so
-%_libdir/gstreamer-%majorminor/libgstdtmf.so
 %_libdir/gstreamer-%majorminor/libgstdvb.so
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
@@ -510,7 +499,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgsthdvparse.so
 %_libdir/gstreamer-%majorminor/libgstid3tag.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
-%_libdir/gstreamer-%majorminor/libgstliveadder.so
 %_libdir/gstreamer-%majorminor/libgstmpegdemux.so
 %_libdir/gstreamer-%majorminor/libgstmpegtsmux.so
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
