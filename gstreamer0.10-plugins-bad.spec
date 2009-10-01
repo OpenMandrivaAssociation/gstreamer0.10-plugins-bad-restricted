@@ -1,6 +1,6 @@
 %define version 0.10.14
 
-%define release %mkrel 4
+%define release %mkrel 5
 %define         _glib2          2.2
 %define major 0.10
 %define majorminor 0.10
@@ -245,6 +245,7 @@ Dirac encoding and decoding plug-in.
 Summary:       GStreamer dirac plug-in based on Schroedinger
 Group:         Video
 BuildRequires: libschroedinger-devel
+Epoch: 1
 
 %description -n %bname-schroedinger
 Dirac encoding and decoding plug-in based on Schroedinger.
