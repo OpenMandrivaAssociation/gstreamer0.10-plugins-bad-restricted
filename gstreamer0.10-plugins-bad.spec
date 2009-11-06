@@ -44,6 +44,7 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
+Patch2: gst-plugins-bad-0.10.16-new-celt.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -421,6 +422,7 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %configure2_5x --disable-dependency-tracking \
@@ -693,7 +695,7 @@ Plug-in for JPEG2000 support under GStreamer.
 Summary: GStreamer plug-in for CELT support
 Group:  Video
 Requires: %bname-plugins >= %{version}
-BuildRequires: celt-devel
+BuildRequires: celt-devel >= 0.7.0
 
 %description -n %bname-celt
 Plug-in for CELT support under GStreamer.
