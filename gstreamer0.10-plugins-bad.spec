@@ -1,7 +1,7 @@
-%define version 0.10.14
+%define version 0.10.16
 
-%define release %mkrel 5
-%define         _glib2          2.2
+%define release %mkrel 1
+%define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
 %define bname gstreamer0.10
@@ -501,6 +501,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstid3tag.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
 %_libdir/gstreamer-%majorminor/libgstmpegdemux.so
+%_libdir/gstreamer-%majorminor/libgstmpegpsmux.so
 %_libdir/gstreamer-%majorminor/libgstmpegtsmux.so
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
 %_libdir/gstreamer-%majorminor/libgstmpeg4videoparse.so
@@ -509,6 +510,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstmxf.so
 %_libdir/gstreamer-%majorminor/libgstoss4audio.so
 %_libdir/gstreamer-%majorminor/libgstpcapparse.so
+%_libdir/gstreamer-%majorminor/libgstpnm.so
 %_libdir/gstreamer-%majorminor/libgstqtmux.so
 %_libdir/gstreamer-%majorminor/libgstscaletempoplugin.so
 %_libdir/gstreamer-%majorminor/libgstshapewipe.so
@@ -521,6 +523,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgststereo.so
 %_libdir/gstreamer-%majorminor/libgstsubenc.so
 %_libdir/gstreamer-%majorminor/libgstvcdsrc.so
+%_libdir/gstreamer-%majorminor/libgstvideomeasure.so
 %_libdir/gstreamer-%majorminor/libgstvideosignal.so
 %_libdir/gstreamer-%majorminor/libgstvmnc.so
 %_libdir/gstreamer-%majorminor/libgstalsaspdif.so
@@ -540,7 +543,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstspeed.so
 %_libdir/gstreamer-%majorminor/libgsttrm.so
 %_libdir/gstreamer-%majorminor/libgsttta.so
-%_libdir/gstreamer-%majorminor/libgstxdgmime.so
 
 %package examples
 Summary:GStreamer example applications
@@ -672,6 +674,7 @@ This package is in PLF as it violates some patents.
 %{_libdir}/gstreamer-%{majorminor}/libgstamrwbenc.so
 %endif
 
+
 %package -n %bname-jp2k
 Summary: GStreamer plug-in for JPEG2000 support
 Group:  Graphics
@@ -700,16 +703,31 @@ Plug-in for CELT support under GStreamer.
 %_libdir/gstreamer-%majorminor/libgstcelt.so
 %endif
 
+
+%package -n %bname-rsvg
+Summary: GStreamer plug-in for SVG support
+Group:  Graphics
+Requires: %bname-plugins >= %{version}
+BuildRequires: librsvg-devel
+
+%description -n %bname-rsvg
+Plug-in for SVG support under GStreamer.
+
+%files -n %bname-rsvg
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstrsvg.so
+
 %files -n %libnamephoto
 %defattr(-, root, root)
 %{_libdir}/libgstphotography-%majorminor.so.%{libmajor}*
-%{_libdir}/libgstsignalprocessor.so.%{libmajor}*
+%{_libdir}/libgstsignalprocessor-%majorminor.so.%{libmajor}*
 
 %files -n %develnamephoto
 %defattr(-, root, root)
 %{_libdir}/libgstphotography-%majorminor.so
-%{_libdir}/libgstsignalprocessor.so
+%{_libdir}/libgstsignalprocessor-%majorminor.so
 %_includedir/gstreamer-0.10/gst/interfaces/photography*
+%_includedir/gstreamer-0.10/gst/signalprocessor/gstsignalprocessor.h
 
 %files -n %libnamebase
 %defattr(-, root, root)
