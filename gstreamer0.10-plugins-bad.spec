@@ -1,6 +1,6 @@
 %define version 0.10.16
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
