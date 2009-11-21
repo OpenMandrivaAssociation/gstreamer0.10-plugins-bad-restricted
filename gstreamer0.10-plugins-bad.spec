@@ -1,6 +1,6 @@
-%define version 0.10.16
+%define version 0.10.17
 
-%define release %mkrel 3
+%define release %mkrel 1
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
@@ -44,7 +44,6 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-Patch2: gst-plugins-bad-0.10.16-new-celt.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -422,7 +421,6 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 %configure2_5x --disable-dependency-tracking \
@@ -485,7 +483,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING README NEWS 
 %_libdir/gstreamer-%majorminor/libgstaacparse.so
 %_libdir/gstreamer-%majorminor/libgstadpcmdec.so
-%_libdir/gstreamer-%majorminor/libgstaiffparse.so
+%_libdir/gstreamer-%majorminor/libgstaiff.so
 %_libdir/gstreamer-%majorminor/libgstamrparse.so
 %_libdir/gstreamer-%majorminor/libgstapexsink.so
 %_libdir/gstreamer-%majorminor/libgstasfmux.so
