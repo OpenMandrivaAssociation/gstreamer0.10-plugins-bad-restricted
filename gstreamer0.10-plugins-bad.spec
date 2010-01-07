@@ -1,6 +1,6 @@
 %define version 0.10.17
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
@@ -379,6 +379,18 @@ Plug-in supporting several metadata formats.
 %files -n %bname-metadata
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstmetadata.so
+
+%package -n %bname-kate
+Summary: GStreamer Karaoke and text plugin
+Group: Video
+BuildRequires: libtiger-devel >= 0.3.2
+
+%description -n %bname-kate
+This is a Karaoke and text plugin for GStreamer based on libkate and libtiger.
+
+%files -n %bname-kate
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstkate.so
 
 %if %build_experimental
 %package -n %bname-resindvd
