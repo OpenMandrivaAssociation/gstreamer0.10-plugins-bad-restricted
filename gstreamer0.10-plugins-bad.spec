@@ -1,6 +1,6 @@
 %define version 0.10.17
 
-%define release %mkrel 3
+%define release %mkrel 4
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
@@ -44,6 +44,10 @@ Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
+#gw from git, fix DVD crash
+#https://bugzilla.gnome.org/show_bug.cgi?id=600263
+#https://qa.mandriva.com/show_bug.cgi?id=55442
+Patch2: gst-plugins-bad-resindvd-crash.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -433,6 +437,7 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %patch -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %configure2_5x --disable-dependency-tracking \
