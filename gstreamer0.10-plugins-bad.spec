@@ -652,7 +652,7 @@ Plug-in for rendering Flash animations using swfdec library
 Summary:  GStreamer HTTP plugin based on libneon
 Group:    System/Libraries
 Requires: %bname-plugins = %{version}
-BuildRequires: neon0.26-devel
+BuildRequires: neon0.27-devel
 
 %description -n %bname-neon
 Plug-in for HTTP access based on libneon.
