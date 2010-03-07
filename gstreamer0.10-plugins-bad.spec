@@ -1,11 +1,13 @@
-%define version 0.10.17
+%define version 0.10.18
 
-%define release %mkrel 5
+%define release %mkrel 1
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
 %define bname gstreamer0.10
 %define name %bname-plugins-bad
+%define gst_required_version 0.10.26.3
+
 %define build_plf 0
 %{?_with_plf: %{expand: %%global build_plf 1}}
 %define build_experimental 1
@@ -30,6 +32,7 @@
 %define libmajor 0
 %define libnamephoto %mklibname gstphotography %major %libmajor
 %define develnamephoto %mklibname -d gstphotography
+%define libnamevdp %mklibname gstvdp %major %libmajor
 %define libnamebase %mklibname gstbasevideo %major %libmajor
 %define develnamebase %mklibname -d gstbasevideo
 
@@ -40,14 +43,10 @@ Release: 	%release
 License: 	LGPLv2+ and GPLv2+
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
-Patch: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
+Patch0: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-#gw from git, fix DVD crash
-#https://bugzilla.gnome.org/show_bug.cgi?id=600263
-#https://qa.mandriva.com/show_bug.cgi?id=55442
-Patch2: gst-plugins-bad-resindvd-crash.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -67,7 +66,7 @@ BuildRequires: nasm => 0.90
 %endif
 BuildRequires: valgrind libcheck-devel
 BuildRequires: libgstreamer-plugins-base-devel >= 0.10.20
-BuildRequires: libgstreamer-devel >= 0.10.21.1
+BuildRequires: libgstreamer-plugins-base-devel >= %gst_required_version
 #gw for checks
 BuildRequires: gstreamer0.10-plugins-good
 BuildRequires: libcdaudio-devel
@@ -118,10 +117,25 @@ plugins.
 
 This package contains the libraries.
 
+%package -n %libnamevdp
+Summary: Libraries for GStreamer streaming-media framework
+Group: System/Libraries
+
+%description -n %libnamevdp
+GStreamer is a streaming-media framework, based on graphs of filters which
+operate on media data. Applications using this library can do anything
+from real-time sound processing to playing videos, and just about anything
+else media-related.  Its plugin-based architecture means that new data
+types or processing capabilities can be added simply by installing new
+plugins.
+
+This package contains the libraries.
+
 %package -n %develnamephoto
 Summary: Libraries and include files for GStreamer streaming-media framework
 Group: Development/C
 Requires: %{libnamephoto} = %{version}
+Requires: %{libnamevdp} = %{version}
 Provides: libgstphotography-devel = %version-%release
 
 %description -n %develnamephoto
@@ -435,9 +449,7 @@ This is the documentation of %name.
 
 %prep
 %setup -q -n gst-plugins-bad-%{version}
-%patch -p1
-%patch1 -p1
-%patch2 -p1
+%apply_patches
 
 %build
 %configure2_5x --disable-dependency-tracking \
@@ -498,16 +510,17 @@ rm -rf $RPM_BUILD_ROOT
 %files -f gst-plugins-bad-%majorminor.lang
 %defattr(-, root, root)
 %doc AUTHORS COPYING README NEWS 
-%_libdir/gstreamer-%majorminor/libgstaacparse.so
 %_libdir/gstreamer-%majorminor/libgstadpcmdec.so
+%_libdir/gstreamer-%majorminor/libgstadpcmenc.so
 %_libdir/gstreamer-%majorminor/libgstaiff.so
-%_libdir/gstreamer-%majorminor/libgstamrparse.so
 %_libdir/gstreamer-%majorminor/libgstapexsink.so
 %_libdir/gstreamer-%majorminor/libgstasfmux.so
+%_libdir/gstreamer-%majorminor/libgstaudioparsersbad.so
 %_libdir/gstreamer-%majorminor/libgstautoconvert.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstcamerabin.so
 %_libdir/gstreamer-%majorminor/libgstdccp.so
+%_libdir/gstreamer-%majorminor/libgstdataurisrc.so
 %_libdir/gstreamer-%majorminor/libgstdebugutilsbad.so
 %_libdir/gstreamer-%majorminor/libgstdvb.so
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
@@ -516,6 +529,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstfrei0r.so
 %_libdir/gstreamer-%majorminor/libgsthdvparse.so
 %_libdir/gstreamer-%majorminor/libgstid3tag.so
+%_libdir/gstreamer-%majorminor/libgstjpegformat.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
 %_libdir/gstreamer-%majorminor/libgstmpegdemux.so
 %_libdir/gstreamer-%majorminor/libgstmpegpsmux.so
@@ -530,7 +544,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstpnm.so
 %_libdir/gstreamer-%majorminor/libgstqtmux.so
 %_libdir/gstreamer-%majorminor/libgstscaletempoplugin.so
-%_libdir/gstreamer-%majorminor/libgstshapewipe.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
 %_libdir/gstreamer-%majorminor/libgstsdpelem.so
@@ -739,12 +752,19 @@ Plug-in for SVG support under GStreamer.
 %{_libdir}/libgstphotography-%majorminor.so.%{libmajor}*
 %{_libdir}/libgstsignalprocessor-%majorminor.so.%{libmajor}*
 
+%files -n %libnamevdp
+%defattr(-, root, root)
+%{_libdir}/libgstvdp-%majorminor.so.%{libmajor}*
+
 %files -n %develnamephoto
 %defattr(-, root, root)
 %{_libdir}/libgstphotography-%majorminor.so
 %{_libdir}/libgstsignalprocessor-%majorminor.so
+%{_libdir}/libgstvdp-%majorminor.so
 %_includedir/gstreamer-0.10/gst/interfaces/photography*
 %_includedir/gstreamer-0.10/gst/signalprocessor/gstsignalprocessor.h
+%_includedir/gstreamer-0.10/gst/vdpau/
+%_libdir/pkgconfig/gstreamer-plugins-bad-%majorminor.pc
 
 %files -n %libnamebase
 %defattr(-, root, root)
