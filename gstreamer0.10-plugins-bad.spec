@@ -1,6 +1,6 @@
 %define version 0.10.18
 
-%define release %mkrel 1
+%define release %mkrel 2
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
@@ -438,6 +438,18 @@ This is a collection of VoIP plugins for GStreamer.
 %_libdir/gstreamer-%majorminor/libgstrtpmux.so
 %_libdir/gstreamer-%majorminor/libgstliveadder.so
 %_libdir/gstreamer-%majorminor/libgstdtmf.so
+
+%package -n %bname-cog
+Summary: GStreamer COG plugin
+Group: Video
+BuildRequires: liborc-devel
+ 
+%description -n %bname-cog
+This is a signal processing plugin for GStreamer based on Orc.
+
+%files -n %bname-cog
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstcog.so
 
 %package doc
 Group: Books/Computer books
