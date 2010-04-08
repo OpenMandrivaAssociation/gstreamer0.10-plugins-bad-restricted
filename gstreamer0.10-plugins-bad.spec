@@ -1,6 +1,6 @@
 %define version 0.10.18
 
-%define release %mkrel 2
+%define release %mkrel 3
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
@@ -47,6 +47,12 @@ Patch0: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
+# (fc) 0.10.18-3mdv use crc for table duplication (GNOME bug #614479) (GIT)
+Patch2: gst-plugins-bad-0.10.18-mpegts-crc.patch
+# (fc) 0.10.18-3mdv fix usage of strings in dvb (GIT)
+Patch3: gst-plugins-bad-0.10.18-dvb-static.patch
+# (fc) 0.10.18-3mdv fix dvb uint handling (GNOME bug #614475) (GIT)
+Patch4: gst-plugins-bad-0.10.18-dvb-uint.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -488,7 +494,7 @@ This is the documentation of %name.
 	--enable-experimental
 %endif
 
-%make
+make
 
 %check
 cd tests/check
