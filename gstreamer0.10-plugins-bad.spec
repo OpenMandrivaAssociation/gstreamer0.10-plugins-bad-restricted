@@ -64,7 +64,7 @@ BuildRequires: liboil-devel >= 0.3.2
 BuildRequires: libSDL-devel
 BuildRequires: libbzip2-devel
 BuildRequires: libmodplug-devel
-BuildRequires: libmusicbrainz3-devel
+BuildRequires: libmusicbrainz-devel
 BuildRequires: exempi-devel
 BuildRequires: openssl-devel
 %ifarch %ix86
