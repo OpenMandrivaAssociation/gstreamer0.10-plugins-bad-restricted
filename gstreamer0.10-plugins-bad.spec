@@ -1,6 +1,6 @@
-%define version 0.10.18
+%define version 0.10.19
 
-%define release %mkrel 3
+%define release %mkrel 1
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
@@ -47,12 +47,6 @@ Patch0: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
-# (fc) 0.10.18-3mdv use crc for table duplication (GNOME bug #614479) (GIT)
-Patch2: gst-plugins-bad-0.10.18-mpegts-crc.patch
-# (fc) 0.10.18-3mdv fix usage of strings in dvb (GIT)
-Patch3: gst-plugins-bad-0.10.18-dvb-static.patch
-# (fc) 0.10.18-3mdv fix dvb uint handling (GNOME bug #614475) (GIT)
-Patch4: gst-plugins-bad-0.10.18-dvb-uint.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
@@ -277,6 +271,18 @@ Dirac encoding and decoding plug-in based on Schroedinger.
 %files -n %bname-schroedinger
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstschro.so
+
+%package -n %bname-vp8
+Summary:       GStreamer VP8 plug-in
+Group:         Video
+BuildRequires: libvpx-devel
+
+%description -n %bname-vp8
+VP8 encoding and decoding plug-in.
+
+%files -n %bname-vp8
+%defattr(-, root, root)
+%{_libdir}/gstreamer-%{majorminor}/libgstvp8.so
 
 ### LADSPA ###
 %package -n %bname-ladspa
@@ -547,6 +553,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstfrei0r.so
 %_libdir/gstreamer-%majorminor/libgsthdvparse.so
 %_libdir/gstreamer-%majorminor/libgstid3tag.so
+%_libdir/gstreamer-%majorminor/libgstinvtelecine.so
 %_libdir/gstreamer-%majorminor/libgstjpegformat.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
 %_libdir/gstreamer-%majorminor/libgstmpegdemux.so
@@ -557,7 +564,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstmve.so
 %_libdir/gstreamer-%majorminor/libgstmimic.so
 %_libdir/gstreamer-%majorminor/libgstmxf.so
-%_libdir/gstreamer-%majorminor/libgstoss4audio.so
 %_libdir/gstreamer-%majorminor/libgstpcapparse.so
 %_libdir/gstreamer-%majorminor/libgstpnm.so
 %_libdir/gstreamer-%majorminor/libgstqtmux.so
@@ -565,6 +571,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
 %_libdir/gstreamer-%majorminor/libgstsdpelem.so
+%_libdir/gstreamer-%majorminor/libgstsegmentclip.so
 %_libdir/gstreamer-%majorminor/libgstselector.so
 %_libdir/gstreamer-%majorminor/libgstsiren.so
 %_libdir/gstreamer-%majorminor/libgstsndfile.so
@@ -601,8 +608,6 @@ This contains example applications to test %{name}
 
 %files examples
 %defattr(-, root, root)
-%_bindir/gst-camera
-%_bindir/gst-camera-perf
 %_datadir/gstreamer-%majorminor/camera-apps/
 
 %package -n %bname-vdpau
