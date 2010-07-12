@@ -1,6 +1,6 @@
 %define version 0.10.19
 
-%define release %mkrel 3
+%define release %mkrel 4
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
@@ -44,9 +44,12 @@ License: 	LGPLv2+ and GPLv2+
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
 Patch0: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
+Patch1: 0001-wildmidi-Add-support-for-wildmidi-0.2.3.patch
+Patch2: 0002-wildmidi-Use-PROP_-instead-of-ARG_-for-property-enum.patch
+Patch3: 0003-wildmidi-Correctly-initialize-properties-with-the-de.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
-Patch1: gst-plugins-bad-0.10.6-real-codecs-path.patch
+Patch10: gst-plugins-bad-0.10.6-real-codecs-path.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
