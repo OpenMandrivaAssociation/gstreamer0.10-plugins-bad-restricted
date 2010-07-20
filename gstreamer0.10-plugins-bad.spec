@@ -78,6 +78,7 @@ BuildRequires: libmimic-devel
 BuildRequires: libass-devel
 #gw for checks
 BuildRequires: gstreamer0.10-plugins-good
+BuildRequires: fonts-ttf-dejavu
 #gw for autoreconf
 BuildRequires: gettext-devel
 Provides:	%bname-audiosrc
