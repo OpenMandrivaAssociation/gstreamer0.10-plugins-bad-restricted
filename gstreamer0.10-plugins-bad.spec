@@ -1,6 +1,6 @@
 %define version 0.10.19
 
-%define release %mkrel 4
+%define release %mkrel 5
 %define         _glib2          2.16
 %define major 0.10
 %define majorminor 0.10
@@ -47,6 +47,8 @@ Patch0: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 Patch1: 0001-wildmidi-Add-support-for-wildmidi-0.2.3.patch
 Patch2: 0002-wildmidi-Use-PROP_-instead-of-ARG_-for-property-enum.patch
 Patch3: 0003-wildmidi-Correctly-initialize-properties-with-the-de.patch
+Patch4: 0001-celt-Add-check-for-celt-0.8.patch
+Patch5: 0001-celt-Fix-compilation-with-celt-0.8.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch10: gst-plugins-bad-0.10.6-real-codecs-path.patch
@@ -477,6 +479,8 @@ This is the documentation of %name.
 %prep
 %setup -q -n gst-plugins-bad-%{version}
 %apply_patches
+#gw patch 4
+autoreconf -fi
 
 %build
 %configure2_5x --disable-dependency-tracking \
