@@ -72,11 +72,12 @@ BuildRequires: nasm => 0.90
 BuildRequires: valgrind libcheck-devel
 BuildRequires: libgstreamer-plugins-base-devel >= 0.10.20
 BuildRequires: libgstreamer-plugins-base-devel >= %gst_required_version
-#gw for checks
-BuildRequires: gstreamer0.10-plugins-good
 BuildRequires: libcdaudio-devel
 BuildRequires: libsndfile-devel
 BuildRequires: libmimic-devel
+BuildRequires: libass-devel
+#gw for checks
+BuildRequires: gstreamer0.10-plugins-good
 #gw for autoreconf
 BuildRequires: gettext-devel
 Provides:	%bname-audiosrc
@@ -429,6 +430,18 @@ This is a Karaoke and text plugin for GStreamer based on libkate and libtiger.
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstkate.so
 
+%package -n %bname-libass
+Summary: GStreamer subtitles plugin
+Group: Video
+BuildRequires: libass-devel
+
+%description -n %bname-libass
+This is a subtitle plugin for GStreamer based on libass.
+
+%files -n %bname-libass
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstassrender.so
+
 %if %build_experimental
 %package -n %bname-resindvd
 Summary: GStreamer DVD menu plugin
@@ -482,7 +495,9 @@ This is the documentation of %name.
 %setup -q -n gst-plugins-bad-%{version}
 %apply_patches
 #gw patch 4
-autoreconf -fi
+aclocal -I m4 -I common/m4
+autoheader
+autoconf
 
 %build
 %configure2_5x --disable-dependency-tracking \
