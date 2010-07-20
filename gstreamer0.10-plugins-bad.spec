@@ -77,6 +77,8 @@ BuildRequires: gstreamer0.10-plugins-good
 BuildRequires: libcdaudio-devel
 BuildRequires: libsndfile-devel
 BuildRequires: libmimic-devel
+#gw for autoreconf
+BuildRequires: gettext-devel
 Provides:	%bname-audiosrc
 Provides:	%bname-audiosink
 Obsoletes:	gstreamer0.10-fluendo-mpegdemux <= 0.10.15
