@@ -1,7 +1,8 @@
-%define version 0.10.19
+%define version 0.10.20
 
-%define release %mkrel 6
-%define         _glib2          2.16
+%define release %mkrel 1
+#gw for gsettings:
+%define         _glib2          2.25
 %define major 0.10
 %define majorminor 0.10
 %define bname gstreamer0.10
@@ -44,22 +45,16 @@ License: 	LGPLv2+ and GPLv2+
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
 Patch0: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
-Patch1: 0001-wildmidi-Add-support-for-wildmidi-0.2.3.patch
-Patch2: 0002-wildmidi-Use-PROP_-instead-of-ARG_-for-property-enum.patch
-Patch3: 0003-wildmidi-Correctly-initialize-properties-with-the-de.patch
-Patch4: 0001-celt-Add-check-for-celt-0.8.patch
-Patch5: 0001-celt-Fix-compilation-with-celt-0.8.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch10: gst-plugins-bad-0.10.6-real-codecs-path.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
-BuildRequires:  gtk+2-devel
-BuildRequires:  glib2-devel >= %_glib2 
-BuildRequires:  libglade2.0-devel
+BuildRequires: gtk+2-devel
+BuildRequires: glib2-devel >= %_glib2 
 BuildRequires: libpng-devel >= 1.2.4-4mdk
-BuildRequires: liboil-devel >= 0.3.2
+BuildRequires: liborc-devel >= 0.4.5
 BuildRequires: libSDL-devel
 BuildRequires: libbzip2-devel
 BuildRequires: libmodplug-devel
@@ -379,6 +374,19 @@ Plug-in supporting the mms protocol based on the libmms library.
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstmms.so
 
+%package -n %bname-rtmp
+Summary:       GStreamer plug-in for rtmp streams
+Group:         System/Libraries
+Requires:      %bname-plugins = %{version}
+BuildRequires: librtmp-devel
+
+%description -n %bname-rtmp
+Plug-in supporting the rtmp protocol based on the librtmp library.
+
+%files -n %bname-rtmp
+%defattr(-, root, root)
+%{_libdir}/gstreamer-%{majorminor}/libgstrtmp.so
+
 %package -n %bname-directfb
 Summary:       GStreamer plug-in for DirectFB output
 Group: Video
@@ -495,10 +503,8 @@ This is the documentation of %name.
 %prep
 %setup -q -n gst-plugins-bad-%{version}
 %apply_patches
-#gw patch 4
-aclocal -I m4 -I common/m4
-autoheader
-autoconf
+#gw broken configure in 0.10.19.2
+#autoreconf -fi
 
 %build
 %configure2_5x --disable-dependency-tracking \
@@ -559,6 +565,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f gst-plugins-bad-%majorminor.lang
 %defattr(-, root, root)
 %doc AUTHORS COPYING README NEWS 
+%_datadir/glib-2.0/schemas/org.freedesktop.gstreamer-0.10.default-elements.gschema.xml
 %_libdir/gstreamer-%majorminor/libgstadpcmdec.so
 %_libdir/gstreamer-%majorminor/libgstadpcmenc.so
 %_libdir/gstreamer-%majorminor/libgstaiff.so
@@ -568,6 +575,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstautoconvert.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstcamerabin.so
+%_libdir/gstreamer-%majorminor/libgstcoloreffects.so
 %_libdir/gstreamer-%majorminor/libgstdccp.so
 %_libdir/gstreamer-%majorminor/libgstdataurisrc.so
 %_libdir/gstreamer-%majorminor/libgstdebugutilsbad.so
@@ -576,9 +584,13 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
 %_libdir/gstreamer-%majorminor/libgstfrei0r.so
+%_libdir/gstreamer-%majorminor/libgstgaudieffects.so
+%_libdir/gstreamer-%majorminor/libgstgeometrictransform.so
+%_libdir/gstreamer-%majorminor/libgstgsettingselements.so
 %_libdir/gstreamer-%majorminor/libgsthdvparse.so
 %_libdir/gstreamer-%majorminor/libgstid3tag.so
 %_libdir/gstreamer-%majorminor/libgstinvtelecine.so
+%_libdir/gstreamer-%majorminor/libgstivfparse.so
 %_libdir/gstreamer-%majorminor/libgstjpegformat.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
 %_libdir/gstreamer-%majorminor/libgstmpegdemux.so
@@ -598,11 +610,13 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstsdpelem.so
 %_libdir/gstreamer-%majorminor/libgstsegmentclip.so
 %_libdir/gstreamer-%majorminor/libgstselector.so
+%_libdir/gstreamer-%majorminor/libgstshm.so
 %_libdir/gstreamer-%majorminor/libgstsiren.so
 %_libdir/gstreamer-%majorminor/libgstsndfile.so
 %_libdir/gstreamer-%majorminor/libgststereo.so
 %_libdir/gstreamer-%majorminor/libgstsubenc.so
 %_libdir/gstreamer-%majorminor/libgstvcdsrc.so
+%_libdir/gstreamer-%majorminor/libgstvideomaxrate.so
 %_libdir/gstreamer-%majorminor/libgstvideomeasure.so
 %_libdir/gstreamer-%majorminor/libgstvideosignal.so
 %_libdir/gstreamer-%majorminor/libgstvmnc.so
@@ -624,16 +638,15 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgsttrm.so
 %_libdir/gstreamer-%majorminor/libgsttta.so
 
-%package examples
-Summary:GStreamer example applications
-Group: Video
+#%package examples
+#Summary:GStreamer example applications
+#Group: Video
 
-%description examples
-This contains example applications to test %{name}
+#%description examples
+#This contains example applications to test %{name}
 
-%files examples
-%defattr(-, root, root)
-%_datadir/gstreamer-%majorminor/camera-apps/
+#%files examples
+#%defattr(-, root, root)
 
 %package -n %bname-vdpau
 Summary:GStreamer plug-in for playback using VDPAU
