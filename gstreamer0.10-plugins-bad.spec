@@ -1,6 +1,6 @@
 %define version 0.10.20
 
-%define release %mkrel 1
+%define release %mkrel 2
 #gw for gsettings:
 %define         _glib2          2.25
 %define major 0.10
