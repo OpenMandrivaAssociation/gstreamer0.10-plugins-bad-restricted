@@ -1,17 +1,17 @@
-%define version 0.10.20
+%define version 0.10.21
 
-%define release %mkrel 4
+%define release %mkrel 1
 #gw for gsettings:
 %define         _glib2          2.25
 %define major 0.10
 %define majorminor 0.10
 %define bname gstreamer0.10
 %define name %bname-plugins-bad
-%define gst_required_version 0.10.26.3
+%define gst_required_version 0.10.32
 
 %define build_plf 0
 %{?_with_plf: %{expand: %%global build_plf 1}}
-%define build_experimental 1
+%define build_experimental 0
 %{?_with_experimental: %{expand: %%global build_experimental 1}}
 %define build_amrwb 0
 %define build_faac 0
@@ -304,20 +304,6 @@ and steve harris's swh-plugins package.
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstladspa.so
 
-%package -n %bname-jack
-Summary:  GStreamer plug-in for the Jack Sound Server
-Group:    Sound
-BuildRequires: libjack-devel => 0.28.0
-Provides:	%bname-audiosrc
-Provides:	%bname-audiosink
-
-%description -n %bname-jack
-Plug-in for the JACK professional sound server.
-
-%files -n %bname-jack
-%defattr(-, root, root)
-%{_libdir}/gstreamer-%{majorminor}/libgstjack.so
-
 %if %build_dts
 %package -n %bname-dts
 Summary:GStreamer plug-ins for DTS audio playback
@@ -413,20 +399,6 @@ Plug-in supporting the SoundTouch audio manipulation support.
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstsoundtouch.so
 
-%package -n %bname-metadata
-Summary:       GStreamer plug-in for metadata support
-Group: System/Libraries
-Requires:      %bname-plugins = %{version}
-BuildRequires: libexif-devel
-BuildRequires: libiptcdata-devel
-
-%description -n %bname-metadata
-Plug-in supporting several metadata formats.
-
-%files -n %bname-metadata
-%defattr(-, root, root)
-%_libdir/gstreamer-%majorminor/libgstmetadata.so
-
 %package -n %bname-kate
 Summary: GStreamer Karaoke and text plugin
 Group: Video
@@ -451,7 +423,6 @@ This is a subtitle plugin for GStreamer based on libass.
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstassrender.so
 
-%if %build_experimental
 %package -n %bname-resindvd
 Summary: GStreamer DVD menu plugin
 Group: Video
@@ -463,7 +434,6 @@ This is a DVD playback plugin for GStreamer with menu support.
 %files -n %bname-resindvd
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libresindvd.so
-%endif
 
 %package -n %bname-voip
 Summary: GStreamer voip plugins
@@ -475,7 +445,6 @@ This is a collection of VoIP plugins for GStreamer.
 
 %files -n %bname-voip
 %defattr(-, root, root)
-%_libdir/gstreamer-%majorminor/libgstvalve.so
 %_libdir/gstreamer-%majorminor/libgstrtpmux.so
 %_libdir/gstreamer-%majorminor/libgstliveadder.so
 %_libdir/gstreamer-%majorminor/libgstdtmf.so
@@ -576,10 +545,12 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstcamerabin.so
 %_libdir/gstreamer-%majorminor/libgstcoloreffects.so
+%_libdir/gstreamer-%majorminor/libgstcolorspace.so
 %_libdir/gstreamer-%majorminor/libgstdccp.so
 %_libdir/gstreamer-%majorminor/libgstdataurisrc.so
 %_libdir/gstreamer-%majorminor/libgstdebugutilsbad.so
 %_libdir/gstreamer-%majorminor/libgstdvb.so
+%_libdir/gstreamer-%majorminor/libgstdvbsuboverlay.so
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
@@ -589,6 +560,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstgsettingselements.so
 %_libdir/gstreamer-%majorminor/libgsthdvparse.so
 %_libdir/gstreamer-%majorminor/libgstid3tag.so
+%_libdir/gstreamer-%majorminor/libgstinterlace.so
 %_libdir/gstreamer-%majorminor/libgstinvtelecine.so
 %_libdir/gstreamer-%majorminor/libgstivfparse.so
 %_libdir/gstreamer-%majorminor/libgstjpegformat.so
@@ -609,7 +581,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstreal.so
 %_libdir/gstreamer-%majorminor/libgstsdpelem.so
 %_libdir/gstreamer-%majorminor/libgstsegmentclip.so
-%_libdir/gstreamer-%majorminor/libgstselector.so
 %_libdir/gstreamer-%majorminor/libgstshm.so
 %_libdir/gstreamer-%majorminor/libgstsiren.so
 %_libdir/gstreamer-%majorminor/libgstsndfile.so
@@ -620,7 +591,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstvideomeasure.so
 %_libdir/gstreamer-%majorminor/libgstvideosignal.so
 %_libdir/gstreamer-%majorminor/libgstvmnc.so
-%_libdir/gstreamer-%majorminor/libgstalsaspdif.so
 %_libdir/gstreamer-%majorminor/libgstbz2.so
 %_libdir/gstreamer-%majorminor/libgstcdaudio.so
 %_libdir/gstreamer-%majorminor/libgstcdxaparse.so
@@ -637,6 +607,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstspeed.so
 %_libdir/gstreamer-%majorminor/libgsttrm.so
 %_libdir/gstreamer-%majorminor/libgsttta.so
+%_libdir/gstreamer-%majorminor/libgsty4mdec.so
 
 #%package examples
 #Summary:GStreamer example applications
@@ -778,6 +749,7 @@ Plug-in for JPEG2000 support under GStreamer.
 %files -n %bname-jp2k
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstjp2k.so
+%_libdir/gstreamer-%majorminor/libgstjp2kdecimator.so
 
 %if %build_celt
 %package -n %bname-celt
