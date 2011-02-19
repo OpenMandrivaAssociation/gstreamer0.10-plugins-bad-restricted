@@ -23,6 +23,10 @@
 %define build_celt 1
 %if %build_plf
 %define distsuffix plf
+%if %mdvver >= 201100
+# make EVR of plf build higher than regular to allow update, needed with rpm5 mkrel
+%define extrarelsuffix plf
+%endif
 %define build_amrwb 1
 %define build_faac 1
 %define build_faad 1
@@ -40,7 +44,7 @@
 Summary: 	GStreamer Streaming-media framework plug-ins
 Name: 		%name
 Version: 	%version
-Release: 	%release
+Release: 	%release%{?extrarelsuffix}
 License: 	LGPLv2+ and GPLv2+
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
