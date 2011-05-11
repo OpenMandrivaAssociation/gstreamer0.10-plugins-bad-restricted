@@ -1,6 +1,6 @@
 %define version 0.10.22
 
-%define release %mkrel 1
+%define release %mkrel 2
 #gw for gsettings:
 %define         _glib2          2.25
 %define major 0.10
@@ -188,6 +188,16 @@ plugins.
 This package contains the libraries and includes files necessary to develop
 applications and plugins for GStreamer.
 
+%package -n %bname-curl
+Summary: GStreamer Curl plugin
+Group: Networking/Other
+BuildRequires: libcurl-devel
+%description -n %bname-curl
+This is a HTTP plugin for GStreamer based on the curl library.
+
+%files -n %bname-curl
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstcurl.so
 
 %package -n %bname-dc1394
 Summary: GStreamer DC1394 plugin
