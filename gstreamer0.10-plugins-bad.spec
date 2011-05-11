@@ -218,6 +218,7 @@ Summary: GStreamer wildmidi plugin
 Group: Sound
 BuildRequires: wildmidi-devel
 Requires: timidity-instruments
+
 %description -n %bname-wildmidi
 This is a MIDI plugin for GStreamer based on the wildmidi library.
 
@@ -291,6 +292,8 @@ VP8 encoding and decoding plug-in.
 %files -n %bname-vp8
 %defattr(-, root, root)
 %{_libdir}/gstreamer-%{majorminor}/libgstvp8.so
+%_libdir/gstreamer-%majorminor/libgstrtpvp8.so
+
 
 ### LADSPA ###
 %package -n %bname-ladspa
@@ -468,9 +471,9 @@ This is a signal processing plugin for GStreamer based on Orc.
 %package doc
 Group: Books/Computer books
 Summary: GStreamer application library
+
 %description doc
 This is the documentation of %name.
-
 
 
 %prep
@@ -596,6 +599,15 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstbz2.so
 %_libdir/gstreamer-%majorminor/libgstcdaudio.so
 %_libdir/gstreamer-%majorminor/libgstcdxaparse.so
+%_libdir/gstreamer-%majorminor/libgstdecklink.so
+%_libdir/gstreamer-%majorminor/libgstfieldanalysis.so
+%_libdir/gstreamer-%majorminor/libgstfragmented.so
+%_libdir/gstreamer-%majorminor/libgstlinsys.so
+%_libdir/gstreamer-%majorminor/libgstmpegtsdemux.so
+%_libdir/gstreamer-%majorminor/libgstpatchdetect.so
+%_libdir/gstreamer-%majorminor/libgstsdi.so
+%_libdir/gstreamer-%majorminor/libgstvideofiltersbad.so
+%_libdir/gstreamer-%majorminor/libgstvideoparsersbad.so
 %if %build_experimental
 #%_libdir/gstreamer-%majorminor/libgstdeinterlace2.so
 %endif
