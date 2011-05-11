@@ -1,13 +1,13 @@
-%define version 0.10.21
+%define version 0.10.22
 
-%define release %mkrel 3
+%define release %mkrel 1
 #gw for gsettings:
 %define         _glib2          2.25
 %define major 0.10
 %define majorminor 0.10
 %define bname gstreamer0.10
 %define name %bname-plugins-bad
-%define gst_required_version 0.10.32
+%define gst_required_version 0.10.33
 
 %define build_plf 0
 %{?_with_plf: %{expand: %%global build_plf 1}}
