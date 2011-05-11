@@ -544,7 +544,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstaiff.so
 %_libdir/gstreamer-%majorminor/libgstapexsink.so
 %_libdir/gstreamer-%majorminor/libgstasfmux.so
-%_libdir/gstreamer-%majorminor/libgstaudioparsersbad.so
 %_libdir/gstreamer-%majorminor/libgstautoconvert.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstcamerabin.so
@@ -579,7 +578,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstmxf.so
 %_libdir/gstreamer-%majorminor/libgstpcapparse.so
 %_libdir/gstreamer-%majorminor/libgstpnm.so
-%_libdir/gstreamer-%majorminor/libgstqtmux.so
 %_libdir/gstreamer-%majorminor/libgstscaletempoplugin.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
