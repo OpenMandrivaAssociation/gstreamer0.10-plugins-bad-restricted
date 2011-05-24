@@ -1,6 +1,6 @@
 %define version 0.10.22
 
-%define release %mkrel 3
+%define release %mkrel 4
 #gw for gsettings:
 %define         _glib2          2.25
 %define major 0.10
@@ -49,6 +49,7 @@ License: 	LGPLv2+ and GPLv2+
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
 Patch0: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
+Patch1: gst-plugins-bad-0.10.22-mjpegtools-2.0.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch10: gst-plugins-bad-0.10.6-real-codecs-path.patch
@@ -493,6 +494,8 @@ This is the documentation of %name.
 #autoreconf -fi
 
 %build
+#work around broken mjpegtools headers including config.h:
+export CPPFLAGS="-I."
 %configure2_5x --disable-dependency-tracking \
 %if %build_plf
   --with-package-name='PLF %name package' \
