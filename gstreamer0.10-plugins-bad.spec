@@ -34,7 +34,7 @@
 %define build_dts 1
 %endif
 
-%define libmajor 0
+%define libmajor 23
 %define libnamephoto %mklibname gstphotography %major %libmajor
 %define develnamephoto %mklibname -d gstphotography
 %define libnamevdp %mklibname gstvdp %major %libmajor
@@ -76,9 +76,7 @@ BuildRequires: libsndfile-devel
 BuildRequires: libmimic-devel
 BuildRequires: libass-devel
 #gw for checks
-BuildRequires: gstreamer0.10-plugins-base
 BuildRequires: gstreamer0.10-plugins-good
-BuildRequires: gstreamer0.10-tools
 BuildRequires: fonts-ttf-dejavu
 #gw for autoreconf
 BuildRequires: gettext-devel
@@ -224,6 +222,28 @@ Fingerprint Architecture library.
 %files -n %bname-ofa
 %defattr(-, root, root)
 %_libdir/gstreamer-%majorminor/libgstofa.so
+
+%package -n %bname-opencv
+Summary: GStreamer opencv plugin
+Group: Video
+BuildRequires: opencv-devel
+%description -n %bname-opencv
+This adds support for OpenCV (Open Source Computer Vision) to GStreamer.
+
+%files -n %bname-opencv
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstopencv.so
+
+%package -n %bname-teletext
+Summary: GStreamer teletext decoder plugin
+Group: Video
+BuildRequires: zvbi-devel
+%description -n %bname-teletext
+This adds support for teletext decoding based on zvbi.
+
+%files -n %bname-teletext
+%defattr(-, root, root)
+%_libdir/gstreamer-%majorminor/libgstteletextdec.so
 
 %package -n %bname-wildmidi
 Summary: GStreamer wildmidi plugin
@@ -561,9 +581,11 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstaiff.so
 %_libdir/gstreamer-%majorminor/libgstapexsink.so
 %_libdir/gstreamer-%majorminor/libgstasfmux.so
+%_libdir/gstreamer-%majorminor/libgstaudiovisualizers.so
 %_libdir/gstreamer-%majorminor/libgstautoconvert.so
 %_libdir/gstreamer-%majorminor/libgstbayer.so
 %_libdir/gstreamer-%majorminor/libgstcamerabin.so
+%_libdir/gstreamer-%majorminor/libgstcamerabin2.so
 %_libdir/gstreamer-%majorminor/libgstcoloreffects.so
 %_libdir/gstreamer-%majorminor/libgstcolorspace.so
 %_libdir/gstreamer-%majorminor/libgstdccp.so
@@ -572,16 +594,18 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstdvb.so
 %_libdir/gstreamer-%majorminor/libgstdvbsuboverlay.so
 %_libdir/gstreamer-%majorminor/libgstdvdspu.so
+%_libdir/gstreamer-%majorminor/libgstfaceoverlay.so
 %_libdir/gstreamer-%majorminor/libgstfbdevsink.so
 %_libdir/gstreamer-%majorminor/libgstfestival.so
 %_libdir/gstreamer-%majorminor/libgstfrei0r.so
+%_libdir/gstreamer-%majorminor/libgstfreeverb.so
 %_libdir/gstreamer-%majorminor/libgstgaudieffects.so
 %_libdir/gstreamer-%majorminor/libgstgeometrictransform.so
 %_libdir/gstreamer-%majorminor/libgstgsettingselements.so
 %_libdir/gstreamer-%majorminor/libgsthdvparse.so
 %_libdir/gstreamer-%majorminor/libgstid3tag.so
 %_libdir/gstreamer-%majorminor/libgstinterlace.so
-%_libdir/gstreamer-%majorminor/libgstinvtelecine.so
+%_libdir/gstreamer-%majorminor/libgstinter.so
 %_libdir/gstreamer-%majorminor/libgstivfparse.so
 %_libdir/gstreamer-%majorminor/libgstjpegformat.so
 %_libdir/gstreamer-%majorminor/libgstlegacyresample.so
@@ -589,12 +613,13 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/gstreamer-%majorminor/libgstmpegpsmux.so
 %_libdir/gstreamer-%majorminor/libgstmpegtsmux.so
 %_libdir/gstreamer-%majorminor/libgstmpegvideoparse.so
-%_libdir/gstreamer-%majorminor/libgstmpeg4videoparse.so
 %_libdir/gstreamer-%majorminor/libgstmve.so
 %_libdir/gstreamer-%majorminor/libgstmimic.so
 %_libdir/gstreamer-%majorminor/libgstmxf.so
 %_libdir/gstreamer-%majorminor/libgstpcapparse.so
 %_libdir/gstreamer-%majorminor/libgstpnm.so
+%_libdir/gstreamer-%majorminor/libgstremovesilence.so
+%_libdir/gstreamer-%majorminor/libgstsmooth.so
 %_libdir/gstreamer-%majorminor/libgstscaletempoplugin.so
 %_libdir/gstreamer-%majorminor/libgstrawparse.so
 %_libdir/gstreamer-%majorminor/libgstreal.so
@@ -810,6 +835,8 @@ Plug-in for SVG support under GStreamer.
 
 %files -n %libnamephoto
 %defattr(-, root, root)
+%{_libdir}/libgstbasecamerabinsrc-%majorminor.so.%{libmajor}*
+%{_libdir}/libgstcodecparsers-%majorminor.so.%{libmajor}*
 %{_libdir}/libgstphotography-%majorminor.so.%{libmajor}*
 %{_libdir}/libgstsignalprocessor-%majorminor.so.%{libmajor}*
 
@@ -819,20 +846,27 @@ Plug-in for SVG support under GStreamer.
 
 %files -n %develnamephoto
 %defattr(-, root, root)
+%{_libdir}/libgstbasecamerabinsrc-%majorminor.so
+%{_libdir}/libgstcodecparsers-%majorminor.so
 %{_libdir}/libgstphotography-%majorminor.so
 %{_libdir}/libgstsignalprocessor-%majorminor.so
 %{_libdir}/libgstvdp-%majorminor.so
+%_includedir/gstreamer-0.10/gst/basecamerabinsrc
+%_includedir/gstreamer-0.10/gst/codecparsers
 %_includedir/gstreamer-0.10/gst/interfaces/photography*
 %_includedir/gstreamer-0.10/gst/signalprocessor/gstsignalprocessor.h
 %_includedir/gstreamer-0.10/gst/vdpau/
+%_libdir/pkgconfig/gstreamer-codecparsers-%majorminor.pc
 %_libdir/pkgconfig/gstreamer-plugins-bad-%majorminor.pc
+%_datadir/gtk-doc/html/gst-plugins-bad-libs-%majorminor
 
 %files -n %libnamebase
-%defattr(-, root, root)
 %defattr(-, root, root)
 %{_libdir}/libgstbasevideo-%majorminor.so.%{libmajor}*
 
 %files -n %develnamebase
 %defattr(-, root, root)
 %{_libdir}/libgstbasevideo-%majorminor.so
-%_includedir/gstreamer-0.10/gst/video/gstbasevideo*
+%_includedir/gstreamer-0.10/gst/video/*
+%_libdir/pkgconfig/gstreamer-basevideo-%majorminor.pc
+
