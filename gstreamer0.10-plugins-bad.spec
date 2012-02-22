@@ -1,6 +1,6 @@
-%define version 0.10.22
+%define version 0.10.23
 
-%define release %mkrel 4
+%define release %mkrel 1
 #gw for gsettings:
 %define         _glib2          2.25
 %define major 0.10
@@ -49,7 +49,6 @@ License: 	LGPLv2+ and GPLv2+
 Group: 		Sound
 Source: 	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
 Patch0: gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
-Patch1: gst-plugins-bad-0.10.22-mjpegtools-2.0.patch
 # gw: fix for bug #36437 (paths to realplayer codecs)
 # prefer codecs from the RealPlayer package in restricted
 Patch10: gst-plugins-bad-0.10.6-real-codecs-path.patch
@@ -724,7 +723,7 @@ Plug-in for rendering Flash animations using swfdec library
 Summary:  GStreamer HTTP plugin based on libneon
 Group:    System/Libraries
 Requires: %bname-plugins = %{version}
-BuildRequires: neon0.27-devel
+BuildRequires: neon-devel
 
 %description -n %bname-neon
 Plug-in for HTTP access based on libneon.
