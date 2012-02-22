@@ -76,7 +76,9 @@ BuildRequires: libsndfile-devel
 BuildRequires: libmimic-devel
 BuildRequires: libass-devel
 #gw for checks
+BuildRequires: gstreamer0.10-plugins-base
 BuildRequires: gstreamer0.10-plugins-good
+BuildRequires: gstreamer0.10-tools
 BuildRequires: fonts-ttf-dejavu
 #gw for autoreconf
 BuildRequires: gettext-devel
