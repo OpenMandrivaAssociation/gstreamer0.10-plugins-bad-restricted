@@ -58,7 +58,7 @@ BuildRoot: 	%{_tmppath}/%{name}-%{version}-root
 BuildRequires: pkgconfig(gtk+-2.0)
 BuildRequires: pkgconfig(glib-2.0) >= %_glib2 
 BuildRequires: pkgconfig(libpng) >= 1.2.4-4mdk
-BuildRequires: pkgconfig(libmodplug) >= 0.4.5
+BuildRequires: pkgconfig(orc-0.4) >= 0.4.5
 BuildRequires: pkgconfig(sdl)
 BuildRequires: bzip2-devel
 BuildRequires: pkgconfig(libmodplug)
