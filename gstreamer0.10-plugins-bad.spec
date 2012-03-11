@@ -55,26 +55,25 @@ Patch10: gst-plugins-bad-0.10.6-real-codecs-path.patch
 URL:            http://gstreamer.freedesktop.org/
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root 
 #gw for the pixbuf plugin
-BuildRequires: gtk+2-devel
-BuildRequires: glib2-devel >= %_glib2 
-BuildRequires: libpng-devel >= 1.2.4-4mdk
-BuildRequires: liborc-devel >= 0.4.5
-BuildRequires: libSDL-devel
-BuildRequires: libbzip2-devel
-BuildRequires: libmodplug-devel
-BuildRequires: libmusicbrainz-devel
-BuildRequires: exempi-devel
-BuildRequires: openssl-devel
+BuildRequires: pkgconfig(gtk+-2.0)
+BuildRequires: pkgconfig(glib-2.0) >= %_glib2 
+BuildRequires: pkgconfig(libpng) >= 1.2.4-4mdk
+BuildRequires: pkgconfig(libmodplug) >= 0.4.5
+BuildRequires: pkgconfig(sdl)
+BuildRequires: bzip2-devel
+BuildRequires: pkgconfig(libmodplug)
+BuildRequires: pkgconfig(libmusicbrainz)
+BuildRequires: pkgconfig(exempi-2.0)
+BuildRequires: pkgconfig(libssl)
 %ifarch %ix86
 BuildRequires: nasm => 0.90
 %endif
 BuildRequires: valgrind libcheck-devel
-BuildRequires: libgstreamer-plugins-base-devel >= 0.10.20
-BuildRequires: libgstreamer-plugins-base-devel >= %gst_required_version
-BuildRequires: libcdaudio-devel
-BuildRequires: libsndfile-devel
-BuildRequires: libmimic-devel
-BuildRequires: libass-devel
+BuildRequires: pkgconfig(gstreamer-plugins-base-0.10) >= %gst_required_version
+BuildRequires: pkgconfig(libcdaudio)
+BuildRequires: pkgconfig(sndfile)
+BuildRequires: pkgconfig(libmimic)
+BuildRequires: pkgconfig(libass)
 #gw for checks
 BuildRequires: gstreamer0.10-plugins-base
 BuildRequires: gstreamer0.10-plugins-good
