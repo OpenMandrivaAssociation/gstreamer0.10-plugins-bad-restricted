@@ -73,7 +73,7 @@ BuildRequires:	valgrind
 BuildRequires:	libcheck-devel
 BuildRequires:	libgstreamer-plugins-base-devel >= 0.10.33
 BuildRequires:	libcdaudio-devel
-BuildRequires:	libsndfile-devel
+BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	libmimic-devel
 BuildRequires:	libass-devel
 #gw for checks
