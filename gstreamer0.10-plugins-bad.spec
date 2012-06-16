@@ -551,7 +551,7 @@ Output plugin for GStreamer to convert to GSM lossy audio format.
 Summary:	GStreamer HTTP plugin based on libneon
 Group:		System/Libraries
 Requires:	%{bname}-plugins
-BuildRequires:	neon0.27-devel
+BuildRequires:	pkgconfig(neon)
 
 %description -n %{bname}-neon
 Plug-in for HTTP access based on libneon.
