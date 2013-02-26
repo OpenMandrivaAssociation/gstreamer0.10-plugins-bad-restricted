@@ -669,8 +669,8 @@ This is the documentation of %{name}.
 #work around broken mjpegtools headers including config.h:
 export CPPFLAGS="-I."
 %configure2_5x --disable-dependency-tracking \
-  --with-package-name='ROSA %{name} package' \
-  --with-package-origin='http://www.rosalab.com/' \
+  --with-package-name='%distribution %{name} package' \
+  --with-package-origin='%{disturl}' \
 %if ! %{build_celt}
 	--disable-celt \
 %endif
