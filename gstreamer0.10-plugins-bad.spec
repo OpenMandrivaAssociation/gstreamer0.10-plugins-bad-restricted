@@ -87,6 +87,7 @@ BuildRequires:	fonts-ttf-dejavu
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(openal)
 BuildRequires:	pkgconfig(opencv)
+BuildRequires:	pkgconfig(opus)
 Provides:	%{bname}-audiosrc
 Provides:	%{bname}-audiosink
 Obsoletes:	gstreamer0.10-fluendo-mpegdemux <= 0.10.15
