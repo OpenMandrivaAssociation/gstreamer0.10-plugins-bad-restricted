@@ -613,7 +613,7 @@ This package is in restricted as it violates some patents.
 Summary:	GStreamer plug-in for JPEG2000 support
 Group:		Graphics
 Requires:	%{bname}-plugins
-BuildRequires:	libjasper-devel
+BuildRequires:	jasper-devel
 
 %description -n %{bname}-jp2k
 Plug-in for JPEG2000 support under GStreamer.
