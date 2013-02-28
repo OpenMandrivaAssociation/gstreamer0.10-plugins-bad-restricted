@@ -752,6 +752,7 @@ GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1 %makeinstall_std
 # New version of opencv is not supported yet,
 # uncomment when the plugin is built again
 #{_libdir}/gstreamer-%{majorminor}/libgstopencv.so
+%{_libdir}/gstreamer-%{majorminor}/libgstopus.so
 %{_libdir}/gstreamer-%{majorminor}/libgstpcapparse.so
 %{_libdir}/gstreamer-%{majorminor}/libgstpnm.so
 %{_libdir}/gstreamer-%{majorminor}/libgstrawparse.so
