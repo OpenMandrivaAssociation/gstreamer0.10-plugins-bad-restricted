@@ -44,11 +44,11 @@
 Summary:	GStreamer Streaming-media framework plug-ins
 Name:		%{bname}-plugins-bad
 Version:	0.10.23
-Release:	3%{?extrarelsuffix}
+Release:	4%{?extrarelsuffix}
 License:	LGPLv2+ and GPLv2+
 Group:		Sound
 URL:		http://gstreamer.freedesktop.org/
-Source:		http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
+Source0:	http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.bz2
 Patch0:		gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 Patch1:		gst-plugins-bad-0.10.23-h264.patch
 # With new directfb we get macro expanded to
@@ -687,23 +687,16 @@ export CPPFLAGS="-I."
 	--enable-experimental
 %endif
 
-make
+%make
 
 %install
-%__rm -rf %{buildroot}
 GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1 %makeinstall_std
 
 %find_lang gst-plugins-bad-%{majorminor}
 
 # Clean out files that should not be part of the rpm.
 # This is the recommended way of dealing with it for RH8
-%__rm -f %{buildroot}%{_libdir}/gstreamer-%{majorminor}/*.la
-%__rm -f %{buildroot}%{_libdir}/gstreamer-%{majorminor}/*.a
-%__rm -f %{buildroot}%{_libdir}/*.a
-%__rm -f %{buildroot}%{_libdir}/*.la
-
-%clean
-%__rm -rf %{buildroot}
+rm %{buildroot}%{_libdir}/*.a
 
 %files -f gst-plugins-bad-%{majorminor}.lang
 %doc AUTHORS COPYING README NEWS
