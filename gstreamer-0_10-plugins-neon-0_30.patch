@@ -1,0 +1,26 @@
+From 3279d633ae23cc92ed7f7fde7b9e00dc0b049874 Mon Sep 17 00:00:00 2001
+From: Alexandre Rostovtsev <tetromino@gentoo.org>
+Date: Mon, 12 Aug 2013 01:02:51 -0400
+Subject: [PATCH] neonhttpsrc: allow building with neon-0.30
+
+https://bugzilla.gnome.org/show_bug.cgi?id=705812
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 94e790b..1bfbdac 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1688,7 +1688,7 @@ AG_GST_CHECK_FEATURE(NAS, [nas plug-in], nassink, [
+ dnl *** neon ***
+ translit(dnm, m, l) AM_CONDITIONAL(USE_NEON, true)
+ AG_GST_CHECK_FEATURE(NEON, [neon http client plugins], neonhttpsrc, [
+-  PKG_CHECK_MODULES(NEON, neon >= 0.27.0  neon <= 0.29.99, HAVE_NEON="yes", [
++  PKG_CHECK_MODULES(NEON, neon >= 0.27.0  neon <= 0.30.99, HAVE_NEON="yes", [
+     HAVE_NEON="no"
+   ])
+   AC_SUBST(NEON_CFLAGS)
+-- 
+1.8.3.2
+

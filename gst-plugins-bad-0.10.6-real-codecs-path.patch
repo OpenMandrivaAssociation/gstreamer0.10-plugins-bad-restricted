@@ -1,0 +1,17 @@
+diff -p -up gst-plugins-bad-0.10.6/gst/real/gstreal.h~ gst-plugins-bad-0.10.6/gst/real/gstreal.h
+--- gst-plugins-bad-0.10.6/gst/real/gstreal.h~	2007-07-25 16:36:25.000000000 +0200
++++ gst-plugins-bad-0.10.6/gst/real/gstreal.h	2008-02-21 13:14:09.000000000 +0100
+@@ -23,11 +23,13 @@
+ 
+ #ifdef HAVE_CPU_I386
+ #define DEFAULT_REAL_CODECS_PATH \
++  "/usr/lib/RealPlayer10GOLD/codecs:/usr/lib/real:" \
+   "/usr/lib/win32:/usr/lib/codecs:/usr/local/RealPlayer/codecs:" \
+   "/usr/local/lib/win32:/usr/local/lib/codecs"
+ #endif
+ #ifdef HAVE_CPU_X86_64
+ #define DEFAULT_REAL_CODECS_PATH \
++  "/usr/lib64/real:" \
+   "/usr/lib64/win32:/usr/lib64/codecs:" \
+   "/usr/local/lib64/win32:/usr/local/lib64/codecs"
+ #endif
