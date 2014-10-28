@@ -1,4 +1,4 @@
-%define build_plf 0
+%define build_plf 1
 %{?_with_plf: %{expand: %%global build_plf 1}}
 %define build_experimental 0
 %{?_with_experimental: %{expand: %%global build_experimental 1}}
