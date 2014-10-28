@@ -464,7 +464,7 @@ This plug-in adds video playback support to GStreamer based on VDPAU
 Summary:	GStreamer plug-in for AAC audio playback
 Group:		Sound
 Requires:	%{bname}-plugins
-BuildRequires:	libfaad2-devel => 2.0
+BuildRequires:	faad2-devel => 2.0
 
 %description -n %{bname}-faad
 Plug-ins for playing AAC audio
