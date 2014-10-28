@@ -14,7 +14,7 @@
 
 ###############################
 # Hardcore PLF build
-%define build_plf 0
+%define build_plf 1
 ###############################
 
 %if %{build_plf}
