@@ -46,7 +46,7 @@ Version:	0.10.23
 Release:	7%{?extrarelsuffix}
 License:	LGPLv2+ and GPLv2+
 Group:		Sound
-Url:		http://gstreamer.freedesktop.org/
+Url:		https://gstreamer.freedesktop.org/
 Source0:	http://gstreamer.freedesktop.org/src/gst-plugins-bad/%{oname}-%{version}.tar.bz2
 Patch0:		gst-plugins-bad-0.10.7-wildmidi-timidity.cfg.patch
 Patch1:		gst-plugins-bad-0.10.23-h264.patch
